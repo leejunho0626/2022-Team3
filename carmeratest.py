@@ -1,3 +1,5 @@
+#카메라 출력 테스트
+
 import cv2
 
 capture = cv2.VideoCapture(0)#카메라 장치번호
