@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:background="@drawable/ic_baseline_camera_alt_24"/>
+
+
+            <EditText
+                android:id="@+id/login_AdminID"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/layout_background"
+                android:ems="17"
+                android:hint="관리자 번호를 입력하세요"
+                android:maxLength="30"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                tools:ignore="MissingConstraints"/>
+
+
+
+
+            <Button
+                android:id="@+id/btnAdmin_login"
+                android:layout_width="357dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FFC107"
+                android:text="관리자 계정 로그인"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="100dp"
+                tools:layout_editor_absoluteY="405dp" />
+
+            <Button
+                android:id="@+id/btnAdmin_signup"
+                android:layout_width="357dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FFC107"
+                android:text="관리자 계정 생성"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="100dp"
+                tools:layout_editor_absoluteY="405dp" />
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="10dp">
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
