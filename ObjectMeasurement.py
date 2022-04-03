@@ -16,7 +16,7 @@ hP = 297 *scale
 
 while True:
    if webcam:success ,img =cap.read()
-   else : img = cv2.imread(path)
+   else : img = cv2.VideoCapture
 
    imgContours, conts = Utils.getContours(img,minArea=50000,filter=4)
    if len(conts) !=0:
