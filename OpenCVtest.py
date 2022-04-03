@@ -1,4 +1,4 @@
-# This is a sample Python script.
+# 이미지 출력 테스트
 import cv2
 print(cv2.__version__)
 
