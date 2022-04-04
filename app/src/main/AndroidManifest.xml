@@ -16,7 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"/>
         <activity android:name=".User_Login"/>
+        <activity android:name=".User_SignUp"/>
+        <activity android:name=".Admin_Login"/>
+        <activity android:name=".Admin_SignUp"/>
+        <activity android:name=".All_DataList"/>
+
     </application>
 
 </manifest>

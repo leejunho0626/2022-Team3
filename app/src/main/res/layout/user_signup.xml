@@ -1,6 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사용자 회원가입"
+                android:textSize="30dp"
+                android:layout_gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp">
+
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="아이디"
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:layout_gravity="left"
+                    tools:ignore="MissingConstraints"/>
+                <TextView
+                    android:id="@+id/txtError1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:paddingLeft="30dp"
+                    android:textColor="#FF0000"
+                    android:textSize="14dp"
+                    tools:ignore="MissingConstraints"
+                    tools:text="오류 메시지" />
+
+
+            </LinearLayout>
+
+            //아이디 입력창
+
+            <EditText
+                android:id="@+id/edtID"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/white_edittext"
+                android:hint=" 이메일을 입력하세요"
+                android:paddingLeft="5dp"
+                android:singleLine="true"
+                tools:ignore="MissingConstraints" />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호"
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+
+                    android:layout_gravity="left"
+                    tools:ignore="MissingConstraints"/>
+                //오류 메시지
+                <TextView
+                    android:id="@+id/txtError2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="오류 메시지"
+                    android:textColor="#FF0000"
+                    android:textSize="14dp"
+                    android:paddingLeft="30dp"
+                    android:layout_gravity="bottom"
+                    tools:ignore="MissingConstraints"/>
+
+            </LinearLayout>
+
+            //비밀번호 입력창
+            <EditText
+                android:id="@+id/edtPW"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:singleLine="true"
+                android:password="true"
+                android:background="@drawable/white_edittext"
+                android:paddingLeft="5dp"
+                android:hint=" 6자리 이상 입력하세요"
+                tools:ignore="MissingConstraints"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호 확인"
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:layout_gravity="left"
+                    tools:ignore="MissingConstraints"/>
+                //오류 메시지
+                <TextView
+                    android:id="@+id/txtError3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="오류 메시지"
+                    android:textColor="#FF0000"
+                    android:textSize="14dp"
+                    android:paddingLeft="30dp"
+                    android:layout_gravity="bottom"
+                    tools:ignore="MissingConstraints"/>
+
+            </LinearLayout>
+
+
+            //비밀번호 재입력창
+            <EditText
+                android:id="@+id/edtPW2"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:singleLine="true"
+                android:password="true"
+                android:hint="다시 한번 입력하세요"
+                android:background="@drawable/white_edittext"
+                android:paddingLeft="10dp"
+                tools:ignore="MissingConstraints"/>
+
+            //회원가입 버튼
+            <Button
+                android:id="@+id/btn_uConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:backgroundTint="#FF9800"
+                android:text="회원가입"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                tools:ignore="MissingConstraints"/>
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

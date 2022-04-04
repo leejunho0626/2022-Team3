@@ -46,7 +46,7 @@
 
 
             <Button
-                android:id="@+id/btnAdmin_login"
+                android:id="@+id/btn_aLogin"
                 android:layout_width="357dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFC107"
@@ -58,7 +58,7 @@
                 tools:layout_editor_absoluteY="405dp" />
 
             <Button
-                android:id="@+id/btnAdmin_signup"
+                android:id="@+id/btn_aSignup"
                 android:layout_width="357dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFC107"
