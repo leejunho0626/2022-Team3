@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 public class User_Login extends AppCompatActivity {
 
-    Button btn_uSignup, btn_uLogin, btn_aLogin;
+    Button btn_uSignup, btn_uLogin, btn_aLogin; //버튼 변수 생성
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,7 @@ public class User_Login extends AppCompatActivity {
         setContentView(R.layout.user_login);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //다크모드 해제
 
+        //버튼 객체 접근
         btn_uSignup = findViewById(R.id.btnUser_signup);
         btn_uLogin = findViewById(R.id.btnUser_Login);
         btn_aLogin = findViewById(R.id.btnAdmin_login);
@@ -28,7 +29,7 @@ public class User_Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(User_Login.this, User_SignUp.class); //화면 전환
-                startActivity(intent);
+                startActivity(intent); //사용자 회원가입 화면으로 이동
             }
         });
 
