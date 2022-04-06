@@ -43,7 +43,7 @@
                     android:layout_gravity="left"
                     tools:ignore="MissingConstraints"/>
                 <TextView
-                    android:id="@+id/txtError1"
+                    android:id="@+id/txt_Error1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -90,7 +90,7 @@
                     tools:ignore="MissingConstraints"/>
                 //오류 메시지
                 <TextView
-                    android:id="@+id/txtError2"
+                    android:id="@+id/txt_Error2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="오류 메시지"
@@ -131,7 +131,7 @@
                     tools:ignore="MissingConstraints"/>
                 //오류 메시지
                 <TextView
-                    android:id="@+id/txtError3"
+                    android:id="@+id/txt_Error3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="오류 메시지"

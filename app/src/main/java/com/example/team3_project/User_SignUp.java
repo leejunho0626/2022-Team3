@@ -47,21 +47,29 @@ public class User_SignUp extends AppCompatActivity {
         btn_uConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 final String id = edt_uID.getText().toString().trim();
                 final String pw = edt_uPW2.getText().toString().trim();
-                firebaseAuth.createUserWithEmailAndPassword(id, pw).addOnCompleteListener(User_SignUp.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        //계정 생성 성공
-                        if (task.isSuccessful()) {
-                            Toast.makeText(User_SignUp.this, "회원가입을 축하합니다.", Toast.LENGTH_SHORT).show();
+                //입력한 아이디와 비밀번호가 있을 경우
+                if(id.length()>0&&pw.length()>0){
+                    firebaseAuth.createUserWithEmailAndPassword(id, pw).addOnCompleteListener(User_SignUp.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            //계정 생성 성공
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "회원가입을 축하합니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(User_SignUp.this, User_Login.class); //화면 전환
+                                startActivity(intent);
+                                finish();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "회원가입 실패.", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else{
-                            Toast.makeText(User_SignUp.this, "아이디 또는 비밀번호를 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                    });
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"아이디 또는 비밀번호를 입력하세요.",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
