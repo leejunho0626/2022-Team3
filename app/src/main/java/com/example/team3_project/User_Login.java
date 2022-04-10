@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,6 +23,8 @@ public class User_Login extends AppCompatActivity {
     Button btn_uSignup, btn_uLogin, btn_aLogin; //버튼 변수 생성
     EditText edt_ID, edt_PW;
     FirebaseAuth firebaseAuth;
+    private long backPressedTime = 0;
+    private final long FINISH_INTERVAL_TIME = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,13 @@ public class User_Login extends AppCompatActivity {
         edt_PW = findViewById(R.id.edt_loginPW);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        //자동로그인(로그아웃을 하지 않고 종료한 경우)
+        if(firebaseAuth.getCurrentUser() != null){
+            Intent intent = new Intent(this, MainActivity.class); //메인화면으로 이동
+            startActivity(intent);
+            finish();
+        }
 
         //사용자 회원가입 버튼 클릭
         btn_uSignup.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +75,22 @@ public class User_Login extends AppCompatActivity {
             }
         });
 
+
+
+    }
+    //뒤로가기 버튼(종료)
+    public void onBackPressed() {
+        long tempTime = System.currentTimeMillis();
+        long intervalTime = tempTime - backPressedTime;
+        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
+            super.onBackPressed();
+            ActivityCompat.finishAffinity(this);
+            System.exit(0);
+        }
+        else {
+            backPressedTime = tempTime;
+            Toast.makeText(this, "뒤로 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }
     }
     //일반 로그인(파이어베이스)
     public void uLogin(String id, String pw){
