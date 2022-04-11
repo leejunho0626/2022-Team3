@@ -35,6 +35,49 @@
                     android:textSize="30dp"
                     android:textColor="@color/black"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="검사원 ID : "
+                        android:textStyle="bold"
+                        android:textSize="25dp"/>
+
+                    <TextView
+                        android:id="@+id/txt_uID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="25dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="크기 : "
+                        android:textStyle="bold"
+                        android:textSize="25dp"/>
+
+                    <TextView
+                        android:id="@+id/txt_size"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="25dp"/>
+
+                </LinearLayout>
+
+
             </LinearLayout>
 
 
