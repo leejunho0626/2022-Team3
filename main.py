@@ -10,8 +10,12 @@ firebase_admin.initialize_app(cred,{
 })
 
 #db 위치 지정, 기본 가장 상단을 가르킴
-ref = db.reference('불량검사 결과/제품1') #경로가 없으면 생성한다.
-ref.update({'가로' : '10'})
+ref = db.reference('Result/제품2') #경로가 없으면 생성한다.
+ref.update({'가로' : '20'})
 ref.update({'세로' : '20'})
+
+#데이터 읽기
+ref = db.reference('불량검사 결과')
+print(ref.get()) #json형태로 받아와 진다. list로 반환
 
 
