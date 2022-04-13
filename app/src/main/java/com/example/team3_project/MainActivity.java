@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private static Animation fab_open, fab_close;
@@ -32,12 +36,15 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private long backPressedTime = 0;
     private final long FINISH_INTERVAL_TIME = 2000;
-    TextView txt_uID, txt_size;
+    TextView txt_uID;
+    ArrayList<String> list = new ArrayList<>();
+    RecyclerView recyclerView;
+    Main_Adapter main_adapter;
     
     //1. Firebase 실시간DB 객체 얻어오기
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     //2. 저장시킬 노드 참조객체 가져오기
-    DatabaseReference ref = firebaseDatabase.getReference("Result"); //()안에 내용이 없으면 최상위 노드
+    DatabaseReference ref = firebaseDatabase.getReference(); //()안에 내용이 없으면 최상위 노드
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,27 +58,13 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
         txt_uID = findViewById(R.id.txt_uID);
-        txt_size = findViewById(R.id.txt_size);
         firebaseAuth = FirebaseAuth.getInstance();
+        main_adapter = new Main_Adapter();
+        recyclerView = findViewById(R.id.recyceler_result);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL, false));
 
         txt_uID.setText(user.getEmail());
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String data = snapshot.getValue().toString();
-                System.out.println(data);
-                data = data.substring(data.indexOf("=")+2);
-                String result = data.substring(0,data.indexOf("}"));
-                txt_size.setText(result);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+        show_Result();
 
 
 
@@ -98,6 +91,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void show_Result(){
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()){
+                    main_adapter.setArrayData(ds.getValue().toString());
+                }
+                recyclerView.setAdapter(main_adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
 
     //뒤로가기 버튼(종료)
     public void onBackPressed() {
