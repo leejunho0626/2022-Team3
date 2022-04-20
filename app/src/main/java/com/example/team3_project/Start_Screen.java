@@ -19,7 +19,7 @@ public class Start_Screen extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(Start_Screen.this, User_Login.class); //화면 전환
+                Intent intent = new Intent(Start_Screen.this, Login_Choice.class); //화면 전환
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 finish();

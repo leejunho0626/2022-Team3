@@ -32,9 +32,10 @@ public class Main_Adapter extends RecyclerView.Adapter<ViewHolder> {
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String text = arrayList.get(position);
 
+        String text = arrayList.get(position);
         holder.txt_result.setText(position+1+". "+text);
+
 
     }
     @Override
@@ -48,6 +49,7 @@ public class Main_Adapter extends RecyclerView.Adapter<ViewHolder> {
     public void setArrayData(String txtList) {
 
         arrayList.add(txtList);
+        notifyDataSetChanged();
 
 
 

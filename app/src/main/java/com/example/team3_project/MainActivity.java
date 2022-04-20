@@ -98,8 +98,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()){
                     main_adapter.setArrayData(ds.getValue().toString());
+                    System.out.println(ds.getValue().toString());
+                    recyclerView.setAdapter(main_adapter);
                 }
-                recyclerView.setAdapter(main_adapter);
+
             }
 
             @Override

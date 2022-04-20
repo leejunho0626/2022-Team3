@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class User_Login extends AppCompatActivity {
 
-    Button btn_uSignup, btn_uLogin, btn_aLogin; //버튼 변수 생성
+    Button btn_uSignup, btn_uLogin; //버튼 변수 생성
     EditText edt_ID, edt_PW;
     FirebaseAuth firebaseAuth;
     private long backPressedTime = 0;
@@ -33,9 +33,8 @@ public class User_Login extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //다크모드 해제
 
         //버튼 객체 접근
-        btn_uSignup = findViewById(R.id.btnUser_signup);
+        btn_uSignup = findViewById(R.id.btnUser_Signup);
         btn_uLogin = findViewById(R.id.btnUser_Login);
-        btn_aLogin = findViewById(R.id.btnAdmin_login);
 
         edt_ID = findViewById(R.id.edt_loginID);
         edt_PW = findViewById(R.id.edt_loginPW);
@@ -65,17 +64,6 @@ public class User_Login extends AppCompatActivity {
                 uLogin(edt_ID.getText().toString(), edt_PW.getText().toString());
             }
         });
-
-        //관리자 계정 로그인 버튼 클릭
-        btn_aLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(User_Login.this, Admin_Login.class); //화면 전환
-                startActivity(intent);
-            }
-        });
-
-
 
     }
     //뒤로가기 버튼(종료)

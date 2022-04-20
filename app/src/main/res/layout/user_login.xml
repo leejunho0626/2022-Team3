@@ -12,8 +12,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +20,6 @@
             android:orientation="vertical"
             android:layout_margin="10dp"
             tools:ignore="MissingConstraints">
-
 
             <ImageView
                 android:layout_width="250dp"
@@ -58,73 +55,28 @@
                 android:singleLine="true"
                 tools:ignore="MissingConstraints"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="5dp">
-
-                <Button
-                    android:id="@+id/btnUser_signup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:backgroundTint="#FF9800"
-                    android:text="사용자 회원가입"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="100dp"
-                    tools:layout_editor_absoluteY="405dp" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/btnUser_Login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:backgroundTint="#FF9800"
-                    android:text="사용자 계정으로 로그인"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="100dp"
-                    tools:layout_editor_absoluteY="405dp" />
-
-
-
-
-
-            </LinearLayout>
-
-
-
             <Button
-                android:id="@+id/btnAdmin_login"
+                android:id="@+id/btnUser_Login"
                 android:layout_width="357dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFC107"
-                android:layout_marginTop="20dp"
-                android:text="관리자 계정으로 로그인"
+                android:layout_marginTop="10dp"
+                android:text="로그인"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="100dp"
-                tools:layout_editor_absoluteY="405dp" />
+                tools:ignore="MissingConstraints"/>
 
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/btnUser_Signup"
+                android:layout_width="357dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="10dp">
+                android:layout_margin="2dp"
+                android:backgroundTint="#FF9800"
+                android:text="사용자 회원가입"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                tools:ignore="MissingConstraints"/>
 
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_baseline_camera_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -20,8 +20,8 @@
         <activity android:name=".User_Login"/>
         <activity android:name=".User_SignUp"/>
         <activity android:name=".Admin_Login"/>
-        <activity android:name=".Admin_SignUp"/>
         <activity android:name=".All_DataList"/>
+        <activity android:name=".Login_Choice"/>
 
     </application>
 

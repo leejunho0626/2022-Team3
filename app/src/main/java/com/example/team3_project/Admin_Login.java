@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 public class Admin_Login extends AppCompatActivity {
 
-    Button btn_aLogin, btn_aSignup;
+    Button btn_aLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,6 @@ public class Admin_Login extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //다크모드 해제
 
         btn_aLogin = findViewById(R.id.btn_aLogin);
-        btn_aSignup = findViewById(R.id.btn_aSignup);
 
         //관리자 계정 로그인 버튼 클릭
         btn_aLogin.setOnClickListener(new View.OnClickListener() {
@@ -30,14 +29,6 @@ public class Admin_Login extends AppCompatActivity {
             }
         });
 
-        //관리자 계정 생성 버튼 클릭
-        btn_aSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Admin_Login.this, Admin_SignUp.class); //화면 전환
-                startActivity(intent);
-            }
-        });
 
     }
 
