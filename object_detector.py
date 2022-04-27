@@ -13,14 +13,14 @@ class HomogeneousBgDetector():
         mask = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 19, 5)
 
         # Find contours
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)    #윤곽잡기
 
         #cv2.imshow("mask", mask)
         objects_contours = []
 
-        for cnt in contours:
-            area = cv2.contourArea(cnt)
-            if area > 2000:
+        for cnt in contours:   #
+            area = cv2.contourArea(cnt)   #면적 읽어주는거
+            if area > 500:
                 #cnt = cv2.approxPolyDP(cnt, 0.03*cv2.arcLength(cnt, True), True)
                 objects_contours.append(cnt)
 
