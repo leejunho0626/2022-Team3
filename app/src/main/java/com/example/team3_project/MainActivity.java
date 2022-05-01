@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +26,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -64,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL, false));
 
         txt_uID.setText(user.getEmail());
-        show_Result();
+        //show_Result();
+        result_check();
 
 
 
@@ -92,26 +98,58 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void show_Result(){
-        ref.addValueEventListener(new ValueEventListener() {
+
+    public void result_check(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    main_adapter.setArrayData(ds.getValue().toString());
-                    System.out.println(ds.getValue().toString());
-                    recyclerView.setAdapter(main_adapter);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot document : task.getResult()){
+                        String str = document.getData().toString();
+
+                        String target5 = "result=";
+                        int target_num5 = str.indexOf(target5);
+                        String result= str.substring(target_num5,(str.substring(target_num5).indexOf(",")+target_num5));
+                        String result2 = result.substring(result.indexOf("=")+1);
+
+
+
+
+                        String target2 = "area=";
+                        int target_num2 = str.indexOf(target2);
+                        String area = str.substring(target_num2,(str.substring(target_num2).indexOf(",")+target_num2));
+                        String area2 = area.substring(area.indexOf("=")+1);
+
+
+                        String target3 = "round=";
+                        int target_num3 = str.indexOf(target3);
+                        String round = str.substring(target_num3,(str.substring(target_num3).indexOf(",")+target_num3));
+                        String round2 = round.substring(round.indexOf("=")+1);
+
+                        String value = area2+"/"+round2;
+
+                        String target4 = "user=";
+                        int target_num4 = str.indexOf(target4);
+                        String user = str.substring(target_num4,(str.substring(target_num4).indexOf("}")+target_num4));
+                        String user2 = user.substring(user.indexOf("=")+1);
+
+                        String target = "time=";
+                        int target_num = str.indexOf(target);
+                        String time = str.substring(target_num,(str.substring(target_num).indexOf(",")+target_num));
+                        String time2 = time.substring(time.indexOf("=")+1);
+
+
+
+                        main_adapter.setArrayData(result2, value, user2, time2);
+                        System.out.println(document.getData().toString());
+                        recyclerView.setAdapter(main_adapter);
+                    }
                 }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
     }
+
 
 
     //뒤로가기 버튼(종료)
