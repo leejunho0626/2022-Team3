@@ -9,26 +9,38 @@ import random
 from datetime import datetime
 from tkinter import *
 import tkinter.messagebox
+import tkinter.font as tkFont
 
 # Firebase database 인증 및 앱 초기화
 
 
 cred = credentials.Certificate('key.json')
-firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://teamproject-642cf-default-rtdb.firebaseio.com/'
+    # 'databaseURL' : '데이터 베이스 url'
+})
 
-db = firestore.client()
+uid='84d8wwDdMOV4uqAXeeTfn5ejRKO2'
 
 
 
-"""user = auth.get_user(None)"""
+
+
+db1 = firestore.client()
+
+
+
 
 results = []
 results2 = []
 
 window = Tk()
-window.title('불량제품 검사')
-window.geometry('600x600+500+100')
+window.title('제품 검사 프로그램')
+window.geometry('400x300+700+300')
 window.resizable(False, False)
+window.config(bg='orange')
+
+
 # 사용자 id와 password를 저장하는 변수 생성
 user_id, userID, password = StringVar(), StringVar(), StringVar()
 
@@ -40,23 +52,27 @@ user_round, user_area, User_ID= StringVar(), StringVar(), StringVar()
 def inputValue():
     try:
         user = ent1.get()
-        uID = auth.get_user_by_email(user)
-        print('Successfully fetched user data: {0}'.format(uID.uid))
+        Pw = ent2.get()
+        uid = auth.get_user_by_email(user)
+        ref = db.reference(uid.uid).child('pw')
+
+        if Pw == ref.get():
+            print('로그인')
 
         window.destroy()
         window2 = Tk()
         window2.title('불량제품 검사')
-        window2.geometry('600x600+500+100')
+        window2.geometry('400x400+700+300')
         window2.resizable(False, False)
 
-        label_main = Label(window2, text="정상 제품 기준치 입력")
+        label_main = Label(window2, text="\n정상 제품 기준치 입력")
         label_main.pack()
 
         label_ID = Label(window2)
         label_ID['text'] = '현재 접속한 ID : ' + user
         label_ID.pack()
 
-        label_round = Label(window2, text="둘레를 입력하세요.")
+        label_round = Label(window2, text="\n둘레를 입력하세요.")
         label_round.pack()
 
         ent_round = Entry(window2)
@@ -127,61 +143,47 @@ def checkStart(id, round, area):
             print("%d번 정상" % number)
             ## 데이터 DB에 전송
             now = datetime.now() ##시간
-            doc_ref = db.collection(id).document(str(number))
+            doc_ref = db1.collection(id).document(str(number))
             doc_ref.set({
-                u'normal_round': result_round[number-1], ##배열[number]하면 배열[1]부터 시작하기 때문에 배열[0]부터 하기위해서 -1을 함.
-                u'normal_area': result_area[number-1],
-                u'User': id,
+                u'round': result_round[number-1], ##배열[number]하면 배열[1]부터 시작하기 때문에 배열[0]부터 하기위해서 -1을 함.
+                u'area': result_area[number-1],
+                u'user': id,
                 u'result': '정상',
-                u'time': str(now)
+                u'time': str(now.strftime('%Y-%m-%d %H:%M:%S'))
             })
         ##불량일 때
         else:
             print("%d번 불량" % number)
             ## 데이터 DB에 전송
             now = datetime.now()
-            doc_ref = db.collection(id).document(str(number))
+            doc_ref = db1.collection(id).document(str(number))
             doc_ref.set({
-                u'normal_round': result_round[number - 1],
-                u'normal_area': result_area[number - 1],
-                u'User': id,
+                u'round': result_round[number - 1],
+                u'area': result_area[number - 1],
+                u'user': id,
                 u'result': '불량',
-                u'time': str(now)
+                u'time': str(now.strftime('%Y-%m-%d %H:%M:%S'))
             })
 
 
-label = Label(window)
-label['text'] = '아이디'
-label.grid(row=0, column=0)
-label.pack()
+font = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
 
-label2 = Label(window)
-
-
-def id(n):
-    label2.config(text="입력한 아이디 : " + ent1.get())
-
+labID = Label(window, bg='orange', font=font)
+labID['text'] = 'ID'
+labID.grid(row=0, column=2, padx=50, pady=10)
 
 ent1 = Entry(window)
-ent1.bind("<Return>", id)
-ent1.pack()
-label2.pack()
+ent1.grid(row=0, column=3)
 
-labPW = Label(window)
-labPW['text'] = '비밀번호'
-labPW.pack()
-
-labPW2 = Label(window)
-
-
-def pw(n):
-    labPW2.config(text="입력한 비밀번호 : " + ent2.get())
+labPW = Label(window, bg='orange', font=font)
+labPW['text'] = 'PW'
+labPW.grid(row=1, column=2, padx=50)
 
 
 ent2 = Entry(window)
-ent2.bind("<Return>", pw)
-ent2.pack()
-labPW2.pack()
+ent2.config(show="*")
+ent2.grid(row=1, column=3)
+
 
 
 def changeFrame():
@@ -193,14 +195,12 @@ def changeFrame():
     except:
         print("오류")
 
-btnLogin = Button(window, text="로그인", command=inputValue)
-btnLogin.pack()
+btnLogin = Button(window, text="로그인", command=inputValue, width=20, height=1, relief='solid')
+btnLogin.grid(row=2, column=3, pady=10)
+btnLogin.config(fg='blue')
+
+btnSignUp = Button(window, text="회원가입", width=20, height=1, relief='solid')
+btnSignUp.grid(row=3, column=3)
+btnSignUp.config(fg='blue')
 
 window.mainloop()
-
-
-
-
-
-
-
