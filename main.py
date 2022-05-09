@@ -20,39 +20,17 @@ firebase_admin.initialize_app(cred, {
     # 'databaseURL' : '데이터 베이스 url'
 })
 
-uid='84d8wwDdMOV4uqAXeeTfn5ejRKO2'
-
-
-
-
+uid = '84d8wwDdMOV4uqAXeeTfn5ejRKO2'
 
 db1 = firestore.client()
 
 
-
-
-results = []
-results2 = []
-
-window = Tk()
-window.title('제품 검사 프로그램')
-window.geometry('400x300+700+300')
-window.resizable(False, False)
-window.config(bg='orange')
-
-
-# 사용자 id와 password를 저장하는 변수 생성
-user_id, userID, password = StringVar(), StringVar(), StringVar()
-
-user_round, user_area, User_ID= StringVar(), StringVar(), StringVar()
-
-
-
-
-def inputValue():
+##정상 기준치 입력
+def inputValue(id, pw, window):
     try:
-        user = ent1.get()
-        Pw = ent2.get()
+
+        user = id
+        Pw = pw
         uid = auth.get_user_by_email(user)
         ref = db.reference(uid.uid).child('pw')
 
@@ -61,55 +39,126 @@ def inputValue():
 
         window.destroy()
         window2 = Tk()
-        window2.title('불량제품 검사')
+        window2.title('제품 검사 프로그램')
         window2.geometry('400x400+700+300')
         window2.resizable(False, False)
+        window2.config(bg='orange')
 
-        label_main = Label(window2, text="\n정상 제품 기준치 입력")
+        label_main = Label(window2, text="\n정상 제품 기준치 입력", bg='orange')
         label_main.pack()
 
-        label_ID = Label(window2)
+        label_ID = Label(window2, bg='orange')
         label_ID['text'] = '현재 접속한 ID : ' + user
         label_ID.pack()
 
-        label_round = Label(window2, text="\n둘레를 입력하세요.")
+        label_round = Label(window2, text="\n둘레를 입력하세요.", bg='orange')
         label_round.pack()
 
         ent_round = Entry(window2)
         ent_round.pack()
 
-        label_area = Label(window2, text="넓이를 입력하세요.")
+        label_area = Label(window2, text="넓이를 입력하세요.", bg='orange')
         label_area.pack()
 
         ent_area = Entry(window2)
         ent_area.pack()
 
-        btn_register = Button(window2, text="등록", command=lambda : messagePrint(user, window2, ent_round.get(), ent_area.get()))
+        btn_register = Button(window2, text="등록",
+                              command=lambda: messagePrint(user, window2, ent_round.get(), ent_area.get()))
         btn_register.pack()
 
         window2.mainloop()
 
     except:
         print("오류")
+        msg = tkinter.messagebox.showinfo('로그인 실패', '입력한 정보가 올바르지 않습니다.')
+
+
+##계정 생성
+def createUser(id, pw, window):
+    print(id, pw)
+    msg = tkinter.messagebox.askquestion('회원가입', '회원가입을 하시겠습니까?')
+    if msg == 'yes':
+        print('네')
+
+        user = auth.create_user(
+            email=id,
+            email_verified=False,
+            password=pw)
+
+        ref = db.reference(user.uid)
+        ref.update({'id': id})
+        ref.update({'pw': pw})
+
+        print('회원가입 완료')
+        window.destroy()
+        signIn()
+
+
+
+
+    else:
+        tkinter.messagebox.showinfo('취소', '취소되었습니다.')
+
+
+##회원가입
+def signUp(window):
+    window.destroy()
+    window4 = Tk()
+    window4.title('제품 검사 프로그램')
+    window4.geometry('400x300+700+300')
+    window4.resizable(False, False)
+    window4.config(bg='orange')
+    font2 = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
+
+    labSignUp = Label(window4, bg='orange', font=font2)
+    labSignUp['text'] = '회원가입'
+    labSignUp.grid(row=0, column=3)
+
+    labuID = Label(window4, bg='orange', font=font2)
+    labuID['text'] = 'ID'
+    labuID.grid(row=1, column=2, padx=50, pady=10)
+
+    entuID = Entry(window4)
+    entuID.grid(row=1, column=3)
+
+    labuPW = Label(window4, bg='orange', font=font2)
+    labuPW['text'] = 'PW'
+    labuPW.grid(row=2, column=2, padx=50)
+
+    entuPW = Entry(window4)
+    entuPW.config(show="*")
+    entuPW.grid(row=2, column=3)
+
+    btnRegister = Button(window4, text="가입하기",
+                         command=lambda: createUser(entuID.get(), entuPW.get(), window4),
+                         width=20, height=1, relief='solid')
+    btnRegister.grid(row=3, column=3, pady=10)
+    btnRegister.config(fg='blue')
+
+    btnReturn = Button(window4, text="← 이전으로",
+                       command=lambda: [window4.destroy(), signIn()], width=20, height=1, relief='solid')
+    btnReturn.grid(row=4, column=3)
+    btnReturn.config(fg='blue')
+
+    window4.mainloop()
 
 
 ##메시지 박스
 def messagePrint(id, w, round, area):
-
     print('아이디:', id, round)
     msg = tkinter.messagebox.askquestion('등록 완료', '제품 검사를 진행하시겠습니까?')
     if msg == 'yes':
         print('진행')
 
-
-
         ##검사 진행
         w.destroy()
-        checkStart(id,round, area)
+        checkStart(id, round, area)
 
 
     else:
         tkinter.messagebox.showinfo('취소', '취소되었습니다.')
+
 
 ## 제품 측정 시작
 def checkStart(id, round, area):
@@ -121,11 +170,11 @@ def checkStart(id, round, area):
 
     ##임의값 생성(테스트용)
 
-    result_round =[]
+    result_round = []
     result_area = []
 
     ##둘레
-    for i in range(1,6):
+    for i in range(1, 6):
         x = random.randrange(10, 20)
         result_round.append(x)
         print(result_round)
@@ -133,20 +182,20 @@ def checkStart(id, round, area):
     for i in range(1, 6):
         x = random.randrange(10, 20)
         result_area.append(x)
-        print( result_area)
+        print(result_area)
 
     number = 0
     for test in result_round:
-        number = number+1 ##순서
+        number = number + 1  ##순서
         ##정상일 때
-        if test == int(round): ##정상 조건
+        if test == int(round):  ##정상 조건
             print("%d번 정상" % number)
             ## 데이터 DB에 전송
-            now = datetime.now() ##시간
+            now = datetime.now()  ##시간
             doc_ref = db1.collection(id).document(str(number))
             doc_ref.set({
-                u'round': result_round[number-1], ##배열[number]하면 배열[1]부터 시작하기 때문에 배열[0]부터 하기위해서 -1을 함.
-                u'area': result_area[number-1],
+                u'round': result_round[number - 1],  ##배열[number]하면 배열[1]부터 시작하기 때문에 배열[0]부터 하기위해서 -1을 함.
+                u'area': result_area[number - 1],
                 u'user': id,
                 u'result': '정상',
                 u'time': str(now.strftime('%Y-%m-%d %H:%M:%S'))
@@ -166,41 +215,43 @@ def checkStart(id, round, area):
             })
 
 
-font = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
+##로그인 화면
+def signIn():
+    window = Tk()
+    window.title('제품 검사 프로그램')
+    window.geometry('400x300+700+300')
+    window.resizable(False, False)
+    window.config(bg='orange')
+    font = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
+    labMain = Label(window, bg='orange', font=font)
+    labMain['text'] = 'Error Detector'
+    labMain.grid(row=0, column=3)
 
-labID = Label(window, bg='orange', font=font)
-labID['text'] = 'ID'
-labID.grid(row=0, column=2, padx=50, pady=10)
+    labID = Label(window, bg='orange', font=font)
+    labID['text'] = 'ID'
+    labID.grid(row=1, column=2, padx=50, pady=10)
 
-ent1 = Entry(window)
-ent1.grid(row=0, column=3)
+    ent1 = Entry(window)
+    ent1.grid(row=1, column=3)
 
-labPW = Label(window, bg='orange', font=font)
-labPW['text'] = 'PW'
-labPW.grid(row=1, column=2, padx=50)
+    labPW = Label(window, bg='orange', font=font)
+    labPW['text'] = 'PW'
+    labPW.grid(row=2, column=2, padx=50)
+
+    ent2 = Entry(window)
+    ent2.config(show="*")
+    ent2.grid(row=2, column=3)
+
+    btnLogin = Button(window, text="로그인", command=lambda: inputValue(ent1.get(), ent2.get(), window), width=20,
+                      height=1, relief='solid')
+    btnLogin.grid(row=3, column=3, pady=10)
+    btnLogin.config(fg='blue')
+
+    btnSignUp = Button(window, text="회원가입", command=lambda: signUp(window), width=20, height=1, relief='solid')
+    btnSignUp.grid(row=4, column=3)
+    btnSignUp.config(fg='blue')
+
+    window.mainloop()
 
 
-ent2 = Entry(window)
-ent2.config(show="*")
-ent2.grid(row=1, column=3)
-
-
-
-def changeFrame():
-    try:
-        user = ent1.get()
-        uID = auth.get_user_by_email(user)
-        print('Successfully fetched user data: {0}'.format(uID.uid))
-
-    except:
-        print("오류")
-
-btnLogin = Button(window, text="로그인", command=inputValue, width=20, height=1, relief='solid')
-btnLogin.grid(row=2, column=3, pady=10)
-btnLogin.config(fg='blue')
-
-btnSignUp = Button(window, text="회원가입", width=20, height=1, relief='solid')
-btnSignUp.grid(row=3, column=3)
-btnSignUp.config(fg='blue')
-
-window.mainloop()
+signIn()
