@@ -19,40 +19,57 @@ database = firestore.client()  # Firestore Database
 
 
 # 정상 기준치 입력 화면
-def inputValue(id, pw, window):
+def inputValue(id, window):
     try:
-        user = id
-
-
+        user = id  # 접속한 사용자 ID
         window.destroy()  # 이전 프레임 종료
         window2 = Tk()
-        window2.title('제품 검사 프로그램')
-        window2.geometry('400x400+700+300')
+        window2.title('Error Detector')
+        window2.geometry('450x300+700+300')
         window2.resizable(False, False)
         window2.config(bg='orange')
+        font3 = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
+        label_main = Label(window2, text="\n  정상 제품 기준치 입력", bg='orange', font=font3)
+        label_main.grid(row=0, column=2, columnspan=2)
 
-        label_main = Label(window2, text="\n정상 제품 기준치 입력", bg='orange')
-        label_main.pack()
+        label_ID = Label(window2, bg='orange', font=font3)
+        label_ID['text'] = '현재 접속한 ID : '
+        label_ID.grid(row=1, column=2, padx=50)
 
-        label_ID = Label(window2, bg='orange')
-        label_ID['text'] = '현재 접속한 ID : ' + user
-        label_ID.pack()
+        label_User = Label(window2, bg='orange', font=font3)
+        label_User['text'] = user
+        label_User.grid(row=1, column=3)
+        label_User.config(fg='red')
 
-        label_round = Label(window2, text="\n둘레를 입력하세요.", bg='orange')
-        label_round.pack()
+        label_round = Label(window2, text="둘레를 입력하세요.", bg='orange', font=("맑은 고딕", 10, "bold"))
+        label_round.grid(row=2, column=2)
 
         ent_round = Entry(window2)
-        ent_round.pack()
+        ent_round.grid(row=2, column=3, pady=10)
+        ent_round.config(highlightthickness=1)
 
-        label_area = Label(window2, text="넓이를 입력하세요.", bg='orange')
-        label_area.pack()
+        label_area = Label(window2, text="넓이를 입력하세요.", bg='orange', font=("맑은 고딕", 10, "bold"))
+        label_area.grid(row=3, column=2)
 
         ent_area = Entry(window2)
-        ent_area.pack()
+        ent_area.grid(row=3, column=3, pady=10)
+        ent_area.config(highlightthickness=1)
+
+        label_img = Label(window2, text="사진을 등록하세요.", bg='orange', font=("맑은 고딕", 10, "bold"))
+        label_img.grid(row=4, column=2)
+
+        btn_imgRegister = Button(window2, text="사진 선택",
+                                 width=20, height=1, relief='raised'
+                                 )
+        btn_imgRegister.grid(row=4, column=3, pady=10)
+        btn_imgRegister.config(fg='blue')
 
         btn_register = Button(window2, text="등록",
-                              command=lambda: messagePrint(user, window2, ent_round.get(), ent_area.get()))
-        btn_register.pack()
+                              command=lambda: messagePrint(user, window2, ent_round.get(), ent_area.get()),
+                              width=20, height=1, relief='solid'
+                              )
+        btn_register.grid(row=5, column=3, pady=10)
+        btn_register.config(fg='blue')
 
         window2.mainloop()
 
@@ -61,7 +78,7 @@ def inputValue(id, pw, window):
         msg = tkinter.messagebox.showinfo('로그인 실패', '입력한 정보가 올바르지 않습니다.')
 
 
-# 계정 생성 화면
+# 계정 생성
 def createUser(id, pw, window):
     print(id, pw)
     msg = tkinter.messagebox.askquestion('회원가입', '회원가입을 하시겠습니까?')
@@ -89,14 +106,14 @@ def createUser(id, pw, window):
 def signUp(window):
     window.destroy()
     window4 = Tk()
-    window4.title('제품 검사 프로그램')
+    window4.title('Error Detector')
     window4.geometry('400x300+700+300')
     window4.resizable(False, False)
     window4.config(bg='orange')
     font2 = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
 
     labSignUp = Label(window4, bg='orange', font=font2)
-    labSignUp['text'] = '회원가입'
+    labSignUp['text'] = '\n회원가입'
     labSignUp.grid(row=0, column=3)
 
     labuID = Label(window4, bg='orange', font=font2)
@@ -105,6 +122,7 @@ def signUp(window):
 
     entuID = Entry(window4)
     entuID.grid(row=1, column=3)
+    entuID.config(highlightthickness=1)
 
     labuPW = Label(window4, bg='orange', font=font2)
     labuPW['text'] = 'PW'
@@ -113,6 +131,7 @@ def signUp(window):
     entuPW = Entry(window4)
     entuPW.config(show="*")
     entuPW.grid(row=2, column=3)
+    entuPW.config(highlightthickness=1)
 
     btnRegister = Button(window4, text="가입하기",
                          command=lambda: createUser(entuID.get(), entuPW.get(), window4),
@@ -147,7 +166,7 @@ def messagePrint(id, w, round, area):
 # 제품 측정 시작 화면
 def checkStart(id, round, area):
     window3 = Tk()
-    window3.title('불량제품 검사')
+    window3.title('Error Detector')
     window3.geometry('600x600+500+100')
     window3.resizable(False, False)
     Label(window3, text="검사 진행 제품 측정").grid(row=0, column=0, padx=10, pady=10)
@@ -209,9 +228,10 @@ def checkInfo(id, pw, window):
         ref = db.reference(uid.uid).child('pw')
         # 아이디와 비밀번호를 입력한 경우
         if len(userID) & len(userPW) > 0:
-
+            # 비밀번호가 올바른 경우
             if userPW == ref.get():
-                inputValue(id, pw, window)
+                inputValue(id, window)  # 정상 기준치 입력 화면으로 이동
+            # 비밀번호가 틀린 경우
             else:
                 tkinter.messagebox.showinfo('Fail', '아이디 또는 비밀번호가 틀렸습니다.')
         # 아이디와 비밀번호를 입력하지 않은 경우
@@ -221,42 +241,45 @@ def checkInfo(id, pw, window):
         tkinter.messagebox.showinfo('Fail', '아이디 또는 비밀번호가 틀렸습니다.')
 
 
-
 # 로그인 화면
 def signIn():
     window = Tk()
-    window.title('제품 검사 프로그램')
+    window.title('Error Detector')
     window.geometry('400x300+700+300')
     window.resizable(False, False)
     window.config(bg='orange')
     font = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
     labMain = Label(window, bg='orange', font=font)
-    labMain['text'] = 'Error Detector'
+    labMain['text'] = '\n Error Detector'
     labMain.grid(row=0, column=3)
 
     labID = Label(window, bg='orange', font=font)
     labID['text'] = 'ID'
-    labID.grid(row=1, column=2, padx=50, pady=10)
+    labID.grid(row=1, column=2, padx=50)
 
-    ent1 = Entry(window)
+    ent1 = Entry(window, font=("맑은 고딕", 10, "bold"))
     ent1.grid(row=1, column=3)
+    ent1.config(highlightthickness=1)
 
     labPW = Label(window, bg='orange', font=font)
     labPW['text'] = 'PW'
     labPW.grid(row=2, column=2, padx=50)
 
-    ent2 = Entry(window)
-    ent2.config(show="*")
+    ent2 = Entry(window, font=("맑은 고딕", 10, "bold"))
+    ent2.config(show="*")  # 입력한 비밀번호 암호화
     ent2.grid(row=2, column=3)
+    ent2.config(highlightthickness=1)
 
-    btnLogin = Button(window, text="로그인", command=lambda: checkInfo(ent1.get(), ent2.get(), window), width=20,
-                      height=1, relief='solid')
+    btnLogin = Button(window, text="로그인",
+                      command=lambda: checkInfo(ent1.get(), ent2.get(), window),
+                      width=20, height=1, relief='solid', font=("맑은 고딕", 10, "bold"))  # 로그인 판단
     btnLogin.grid(row=3, column=3, pady=10)
     btnLogin.config(fg='blue')
 
-    btnSignUp = Button(window, text="회원가입", command=lambda: signUp(window), width=20, height=1, relief='solid')
+    btnSignUp = Button(window, text="회원가입",
+                       command=lambda: signUp(window),
+                       width=20, height=1, relief='solid', font=("맑은 고딕", 10, "bold"))  # 회원가입 화면으로 이동
     btnSignUp.grid(row=4, column=3)
-    btnSignUp.config(fg='blue')
 
     window.mainloop()
 
