@@ -1,5 +1,3 @@
-import uuid
-
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -11,33 +9,22 @@ from tkinter import *
 import tkinter.messagebox
 import tkinter.font as tkFont
 
-# Firebase database 인증 및 앱 초기화
-
-
+# Firebase database 인증 및 앱 초기화(Realtime Database, Firestore Database)
 cred = credentials.Certificate('key.json')
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://teamproject-642cf-default-rtdb.firebaseio.com/'
     # 'databaseURL' : '데이터 베이스 url'
-})
-
-uid = '84d8wwDdMOV4uqAXeeTfn5ejRKO2'
-
-db1 = firestore.client()
+})  # Realtime Database
+database = firestore.client()  # Firestore Database
 
 
-##정상 기준치 입력
+# 정상 기준치 입력 화면
 def inputValue(id, pw, window):
     try:
-
         user = id
-        Pw = pw
-        uid = auth.get_user_by_email(user)
-        ref = db.reference(uid.uid).child('pw')
 
-        if Pw == ref.get():
-            print('로그인')
 
-        window.destroy()
+        window.destroy()  # 이전 프레임 종료
         window2 = Tk()
         window2.title('제품 검사 프로그램')
         window2.geometry('400x400+700+300')
@@ -74,7 +61,7 @@ def inputValue(id, pw, window):
         msg = tkinter.messagebox.showinfo('로그인 실패', '입력한 정보가 올바르지 않습니다.')
 
 
-##계정 생성
+# 계정 생성 화면
 def createUser(id, pw, window):
     print(id, pw)
     msg = tkinter.messagebox.askquestion('회원가입', '회원가입을 하시겠습니까?')
@@ -94,14 +81,11 @@ def createUser(id, pw, window):
         window.destroy()
         signIn()
 
-
-
-
     else:
         tkinter.messagebox.showinfo('취소', '취소되었습니다.')
 
 
-##회원가입
+# 회원 가입 화면
 def signUp(window):
     window.destroy()
     window4 = Tk()
@@ -144,7 +128,7 @@ def signUp(window):
     window4.mainloop()
 
 
-##메시지 박스
+# 제품 검사 진행 메시지 박스
 def messagePrint(id, w, round, area):
     print('아이디:', id, round)
     msg = tkinter.messagebox.askquestion('등록 완료', '제품 검사를 진행하시겠습니까?')
@@ -160,7 +144,7 @@ def messagePrint(id, w, round, area):
         tkinter.messagebox.showinfo('취소', '취소되었습니다.')
 
 
-## 제품 측정 시작
+# 제품 측정 시작 화면
 def checkStart(id, round, area):
     window3 = Tk()
     window3.title('불량제품 검사')
@@ -168,17 +152,17 @@ def checkStart(id, round, area):
     window3.resizable(False, False)
     Label(window3, text="검사 진행 제품 측정").grid(row=0, column=0, padx=10, pady=10)
 
-    ##임의값 생성(테스트용)
+    # 임의값 생성(테스트용)
 
     result_round = []
     result_area = []
 
-    ##둘레
+    # 둘레
     for i in range(1, 6):
         x = random.randrange(10, 20)
         result_round.append(x)
         print(result_round)
-    ##넓이
+    # 넓이
     for i in range(1, 6):
         x = random.randrange(10, 20)
         result_area.append(x)
@@ -186,26 +170,26 @@ def checkStart(id, round, area):
 
     number = 0
     for test in result_round:
-        number = number + 1  ##순서
-        ##정상일 때
-        if test == int(round):  ##정상 조건
+        number = number + 1  # 순서
+        # 정상일 때
+        if test == int(round):  # 정상 조건
             print("%d번 정상" % number)
-            ## 데이터 DB에 전송
-            now = datetime.now()  ##시간
-            doc_ref = db1.collection(id).document(str(number))
+            # 데이터 DB에 전송
+            now = datetime.now()  # 시간
+            doc_ref = database.collection(id).document(str(number))
             doc_ref.set({
-                u'round': result_round[number - 1],  ##배열[number]하면 배열[1]부터 시작하기 때문에 배열[0]부터 하기위해서 -1을 함.
+                u'round': result_round[number - 1],  # 배열[number]하면 배열[1]부터 시작하기 때문에 배열[0]부터 하기위해서 -1을 함.
                 u'area': result_area[number - 1],
                 u'user': id,
                 u'result': '정상',
                 u'time': str(now.strftime('%Y-%m-%d %H:%M:%S'))
             })
-        ##불량일 때
+        # 불량일 때
         else:
             print("%d번 불량" % number)
-            ## 데이터 DB에 전송
+            # 데이터 DB에 전송
             now = datetime.now()
-            doc_ref = db1.collection(id).document(str(number))
+            doc_ref = database.collection(id).document(str(number))
             doc_ref.set({
                 u'round': result_round[number - 1],
                 u'area': result_area[number - 1],
@@ -215,7 +199,30 @@ def checkStart(id, round, area):
             })
 
 
-##로그인 화면
+# 로그인 판단
+def checkInfo(id, pw, window):
+    try:
+        userID = id
+        userPW = pw
+
+        uid = auth.get_user_by_email(id)
+        ref = db.reference(uid.uid).child('pw')
+        # 아이디와 비밀번호를 입력한 경우
+        if len(userID) & len(userPW) > 0:
+
+            if userPW == ref.get():
+                inputValue(id, pw, window)
+            else:
+                tkinter.messagebox.showinfo('Fail', '아이디 또는 비밀번호가 틀렸습니다.')
+        # 아이디와 비밀번호를 입력하지 않은 경우
+        else:
+            tkinter.messagebox.showinfo('Fail', '아이디 또는 비밀번호를 입력하세요.')
+    except:
+        tkinter.messagebox.showinfo('Fail', '아이디 또는 비밀번호가 틀렸습니다.')
+
+
+
+# 로그인 화면
 def signIn():
     window = Tk()
     window.title('제품 검사 프로그램')
@@ -242,7 +249,7 @@ def signIn():
     ent2.config(show="*")
     ent2.grid(row=2, column=3)
 
-    btnLogin = Button(window, text="로그인", command=lambda: inputValue(ent1.get(), ent2.get(), window), width=20,
+    btnLogin = Button(window, text="로그인", command=lambda: checkInfo(ent1.get(), ent2.get(), window), width=20,
                       height=1, relief='solid')
     btnLogin.grid(row=3, column=3, pady=10)
     btnLogin.config(fg='blue')
@@ -254,4 +261,4 @@ def signIn():
     window.mainloop()
 
 
-signIn()
+signIn()  # 프로그램 시작(로그인 화면)
