@@ -2,6 +2,7 @@ package com.example.team3_project;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,11 +13,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class User_SignUp extends AppCompatActivity {
 
@@ -56,6 +66,12 @@ public class User_SignUp extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             //계정 생성 성공
                             if (task.isSuccessful()) {
+                                Map<String, Object> info = new HashMap<>();
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                info.put("id", user.getEmail());
+                                info.put("pw", pw);
+                                saveID();
+                                databaseReference.child(user.getUid()).setValue(info);
                                 Toast.makeText(getApplicationContext(), "회원가입을 축하합니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(User_SignUp.this, User_Login.class); //화면 전환
                                 startActivity(intent);
@@ -74,5 +90,25 @@ public class User_SignUp extends AppCompatActivity {
             }
         });
 
+    }
+    //파이어스토어에 ID 저장
+    public void saveID(){
+        Map<String, Object> id = new HashMap<>();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        id.put("id", user.getEmail());
+        db.collection("User").document(user.getEmail()).set(id) //경로
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void avoid) {
+                        Log.i(TAG, "success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "fail");
+                    }
+                });
     }
 }

@@ -69,10 +69,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL, false));
 
         txt_uID.setText(user.getEmail());
-        //show_Result();
         result_check();
-
-
 
         //플로팅메뉴
         fab.setOnClickListener(new Button.OnClickListener() {
@@ -97,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
+    
+    //검사 결과 확인
     public void result_check(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -112,9 +109,6 @@ public class MainActivity extends AppCompatActivity {
                         int target_num5 = str.indexOf(target5);
                         String result= str.substring(target_num5,(str.substring(target_num5).indexOf(",")+target_num5));
                         String result2 = result.substring(result.indexOf("=")+1);
-
-
-
 
                         String target2 = "area=";
                         int target_num2 = str.indexOf(target2);
