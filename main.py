@@ -8,6 +8,11 @@ from datetime import datetime
 from tkinter import *
 import tkinter.messagebox
 import tkinter.font as tkFont
+from tkinter import filedialog
+import shutil
+import os
+from PySide2.QtWidgets import QFileDialog
+import cv2
 
 # Firebase database 인증 및 앱 초기화(Realtime Database, Firestore Database)
 cred = credentials.Certificate('key.json')
@@ -59,16 +64,17 @@ def inputValue(id, window):
         label_img.grid(row=4, column=2)
 
         btn_imgRegister = Button(window2, text="사진 선택",
+                                 command=lambda: fLoad(window2),
                                  width=20, height=1, relief='raised'
                                  )
+
         btn_imgRegister.grid(row=4, column=3, pady=10)
         btn_imgRegister.config(fg='blue')
 
         btn_register = Button(window2, text="등록",
-                              command=lambda: messagePrint(user, window2, ent_round.get(), ent_area.get()),
                               width=20, height=1, relief='solid'
                               )
-        btn_register.grid(row=5, column=3, pady=10)
+        btn_register.grid(row=6, column=3, pady=10)
         btn_register.config(fg='blue')
 
         window2.mainloop()
@@ -77,6 +83,18 @@ def inputValue(id, window):
         print("오류")
         msg = tkinter.messagebox.showinfo('로그인 실패', '입력한 정보가 올바르지 않습니다.')
 
+
+# 파일 선택
+def fLoad(window):
+    img = filedialog.askopenfilename(initialdir='/', title="select a file",)  # 파일 선택, 선택한 파일 경로를 img 변수에 저장
+
+    label_imgFile = Label(window, text=img, bg='orange', font=("맑은 고딕", 10))  # 선택한 파일 경로 표시
+    label_imgFile.grid(row=5, column=2)
+    print("경로", img)
+    root_dir = 'C:/3Team'
+    os.mkdir(root_dir)
+    route = "C:/3Team/img.jpg"  # 새로 복사할 경로
+    shutil.copyfile(img, route)
 
 # 계정 생성
 def createUser(id, pw, window):
