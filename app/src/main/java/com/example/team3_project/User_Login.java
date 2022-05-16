@@ -68,17 +68,9 @@ public class User_Login extends AppCompatActivity {
     }
     //뒤로가기 버튼(종료)
     public void onBackPressed() {
-        long tempTime = System.currentTimeMillis();
-        long intervalTime = tempTime - backPressedTime;
-        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
-            super.onBackPressed();
-            ActivityCompat.finishAffinity(this);
-            System.exit(0);
-        }
-        else {
-            backPressedTime = tempTime;
-            Toast.makeText(this, "뒤로 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent(User_Login.this, Login_Choice.class); //메인화면으로 이동
+        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
     //일반 로그인(파이어베이스)
     public void uLogin(String id, String pw){

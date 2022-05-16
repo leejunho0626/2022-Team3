@@ -84,6 +84,7 @@ public class Admin_SignUp extends AppCompatActivity {
         info.put("id", aID);
             databaseReference.child(aID).addValueEventListener(new ValueEventListener() {
                 @Override
+                //데이터 존재 유무 검사
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     //예외처리 
                     //이미 등록된 번호일 때
