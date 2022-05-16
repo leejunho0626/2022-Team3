@@ -49,7 +49,19 @@
                 android:layout_width="357dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFC107"
-                android:text="관리자 계정 로그인"
+                android:text="관리자 로그인"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="100dp"
+                tools:layout_editor_absoluteY="405dp" />
+
+            <Button
+                android:id="@+id/btn_aRegister"
+                android:layout_width="357dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FFC107"
+                android:text="관리자 등록"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 tools:ignore="MissingConstraints"
