@@ -1,9 +1,14 @@
 import cv2
+import rulebase
+
 from object_detector import *
 from object_size_check import *
 import numpy as np
 import time
 import utils
+from datetime import datetime
+from rulebase import *
+
 
 def playVideo(route):
     target = cv2.imread(route)  # 매칭 대상
@@ -30,10 +35,13 @@ def playVideo(route):
         contours = utils.getContours(frame)  # 캐니에지 기법
         #
         cv2.drawContours(frame, contours, -1, (255, 255, 0), 3)
+        second_check = 0;
 
         for cnt in contours:
             scale = 2.80
             sizecheck_ = sizecheck.size_check(roundlist, roundcnt)
+            now = datetime.now()
+            second = now.second
             length = cv2.arcLength(cnt, closed=True) / scale
             # print("윤곽선의 총 길이", length)
             matchpoint = cv2.matchShapes(target_contours[0], cnt, cv2.CONTOURS_MATCH_I3, 0.0)
@@ -46,10 +54,16 @@ def playVideo(route):
                         cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
             roundlist.append(length)
             matchlist.append(matchpoint)
-            if sizecheck_ == False:
-                print("다른 객체 인식")
-                print(sizecheck.calculat_size(roundlist))
-                print(sizecheck.calculat_size(matchlist))
+            if len(roundlist) > 100 :
+                if sizecheck_ == False:
+                    print("다른 객체 인식")
+                    print(sizecheck.calculat_size(roundlist))
+                    print(sizecheck.calculat_size(matchlist))
+                    roundlist.clear()
+                    matchlist.clear()
+                    #print(rulebase.rule_algorithm()) # true false값
+
+
 
             roundcnt += 1
 
@@ -59,4 +73,3 @@ def playVideo(route):
 
     capture.release()
     cv2.destroyAllWindows()
-
