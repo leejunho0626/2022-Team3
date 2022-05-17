@@ -1,54 +1,31 @@
 import cv2
-import numpy as np
-import utils
-
-webcam = False
-path = '1.jpg'
-
-cap = cv2.VideoCapture(0)
-cap.set(10, 160)
-cap.set(3, 1920)
-cap.set(4, 1080)
-scale = 3
-wP = 210 *scale
-hP = 297 *scale
-
-while True:
-    if webcam:success.img = cap.read()
-    else: img = cv2.imread(path)
-
-    img, conts = utils.getContours(img,minArea=50000,filter=4)
-
-    if len(conts) != 0:
-        biggest = conts[0][2]
-        #print(biggest)
-        imgWarp = utils.warpImg(img, biggest, wP, hP)
-        imgContours2, conts2 = utils.getContours(imgWarp
-                                                 , minArea=2000, filter=4,
-                                                 cThr=[50,50],draw = False)
-        if len(conts) !=0:
-            for obj in conts2:
-                cv2.polylines(imgContours2,[obj[2]],True,(0,255,0),2)
-                nPoints = utils.reorder(obj[2])
-                nW = round((utils.findDis(nPoints[0][0]//scale,nPoints[1][0]//scale)/10),1)
-                nH = round((utils.findDis(nPoints[0][0]//scale,nPoints[2][0]//scale)/10),1)
-                cv2.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
-                                (255, 0, 255), 3, 8, 0, 0.05)
-                cv2.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]),
-                                (nPoints[2][0][0], nPoints[2][0][1]),
-                                (255, 0, 255), 3, 8, 0, 0.05)
-                x, y, w, h = obj[3]
-                cv2.putText(imgContours2, '{}cm'.format(nW), (x + 30, y - 10), cv2.FONT_HERSHEY_COMPLEX_SMALL,1,
-                            (255, 0, 255), 2)
-                cv2.putText(imgContours2, '{}cm'.format(nH), (x - 70, y + h // 2), cv2.FONT_HERSHEY_COMPLEX_SMALL,1,
-                            (255, 0, 255), 2)
 
 
+class HomogeneousBgDetector():
+    def __init__(self):
+        pass
 
-        cv2.imshow('A4', imgContours2)
+    def detect_objects(self, frame):
+        # Convert Image to grayscale
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+        # Create a Mask with adaptive threshold
+        mask = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 19, 5)
 
-    img = cv2.resize(img,(0,0), None,0.5,0.5)
-    cv2.imshow('Original',img)
-    cv2.waitKey(1)
+        # Find contours
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)    #윤곽잡기
 
+        #cv2.imshow("mask", mask)
+        objects_contours = []
+
+        for cnt in contours:   #
+            area = cv2.contourArea(cnt)   #면적 읽어주는거
+            if area > 500:
+                #cnt = cv2.approxPolyDP(cnt, 0.03*cv2.arcLength(cnt, True), True)
+                objects_contours.append(cnt)
+
+        return objects_contours
+
+    # def get_objects_rect(self):
+    #     box = cv2.boxPoints(rect)  # cv2.boxPoints(rect) for OpenCV 3.x
+    #     box = np.int0(box)
