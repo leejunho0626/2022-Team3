@@ -35,7 +35,6 @@ def playVideo(route):
         contours = utils.getContours(frame)  # 캐니에지 기법
         #
         cv2.drawContours(frame, contours, -1, (255, 255, 0), 3)
-        second_check = 0;
 
         for cnt in contours:
             scale = 2.80
@@ -57,11 +56,14 @@ def playVideo(route):
             if len(roundlist) > 100 :
                 if sizecheck_ == False:
                     print("다른 객체 인식")
-                    print(sizecheck.calculat_size(roundlist))
-                    print(sizecheck.calculat_size(matchlist))
+
+                    print(sizecheck.calculat_size(rulebase.del_arr(100, roundlist)))
+                    rsz_ = sizecheck.calculat_size(rulebase.del_arr(100, roundlist))
+                    print(sizecheck.calculat_size(rulebase.del_arr(100, matchlist)))
+                    mtz_ = sizecheck.calculat_size(rulebase.del_arr(100, matchlist))
                     roundlist.clear()
                     matchlist.clear()
-                    #print(rulebase.rule_algorithm()) # true false값
+                    #print(rulebase.rule_algorithm(real_size, rsz_, real_match_point, mtz_)) # true false값
 
 
 
