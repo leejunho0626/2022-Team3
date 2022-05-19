@@ -26,6 +26,46 @@ class object_size_check():
 
 
 
+    def calculat_size(self, list_):
+        count = []
+        i = 0
+        cnt = 0
+
+        while i < len(list_):
+            count.append(round(list_[i]))
+            i += 1
+
+        i = 0
+        num = 0
+        temp = 0
+        tmp = 0
+
+        while i < len(count):
+            num = count[i]
+            j = 0
+            while j < len(count):
+                if num == count[j]:
+                    cnt += 1
+                j += 1
+            if temp < cnt:
+                tmp = num
+                temp = cnt
+            cnt = 0
+
+            i += 1
+
+        i = 0
+        cnt = 0
+        add = 0
+        while i < len(list_):
+            if tmp - 1.5 < list_[i] < tmp + 1.5:
+                add += list_[i]
+                cnt += 1
+
+            i += 1
+
+        return add / cnt
+
         #cnt 39라 가정
         #cnt 29~39 값 cnt 19~29 값 비교
 
@@ -36,5 +76,6 @@ class object_size_check():
     #def 일정 초과 값이나 사이즈 값에 미치지 못하는 값 제거
 
     #def 평균값 추출 여기서 matchpoint 평균값도 해주면 될듯
+
 
 

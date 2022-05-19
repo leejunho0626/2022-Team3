@@ -1,3 +1,4 @@
+from measure_object_size import *
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -11,16 +12,16 @@ import tkinter.font as tkFont
 from tkinter import filedialog
 import shutil
 import os
-from PySide2.QtWidgets import QFileDialog
-import cv2
+
+import measure_object_size
+
 
 # Firebase database 인증 및 앱 초기화(Realtime Database, Firestore Database)
 cred = credentials.Certificate('key.json')
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://teamproject-642cf-default-rtdb.firebaseio.com/'
-    # 'databaseURL' : '데이터 베이스 url'
-})  # Realtime Database
+
 database = firestore.client()  # Firestore Database
+
+route = "C:/3Team/img.jpg"
 
 
 # 정상 기준치 입력 화면
@@ -72,6 +73,7 @@ def inputValue(id, window):
         btn_imgRegister.config(fg='blue')
 
         btn_register = Button(window2, text="등록",
+                              command=lambda : measure_object_size.playVideo(route, user),
                               width=20, height=1, relief='solid'
                               )
         btn_register.grid(row=6, column=3, pady=10)
@@ -92,9 +94,22 @@ def fLoad(window):
     label_imgFile.grid(row=5, column=2)
     print("경로", img)
     root_dir = 'C:/3Team'
-    os.mkdir(root_dir)
+    try:
+        os.mkdir(root_dir)  # 폴더 생성
+    except OSError:
+        if not os.path.isdir(root_dir):
+            raise
+
     route = "C:/3Team/img.jpg"  # 새로 복사할 경로
     shutil.copyfile(img, route)
+
+# 크기 값 받아오기
+def size_data(round, area):
+    r = round
+    a = area
+
+    print('둘레 : '+r+'넓이 : ' + a)
+
 
 # 계정 생성
 def createUser(id, pw, window):
