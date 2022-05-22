@@ -4,13 +4,11 @@ import rulebase
 from object_detector import *
 from object_size_check import *
 import numpy as np
-import time
 import utils
-from datetime import datetime
 from rulebase import *
 
 
-def playVideo(route):
+def playVideo(route, user, r_size, r_area):
     target = cv2.imread(route)  # 매칭 대상
     capture = cv2.VideoCapture(0)
     capture.set(cv2.CAP_PROP_FRAME_WIDTH, 420)
@@ -19,6 +17,7 @@ def playVideo(route):
     roundlist = []
     roundcnt = 0
     matchlist = []
+    arealist = []
 
     target_detector = HomogeneousBgDetector()
     target_contours = target_detector.detect_objects(target)
@@ -27,7 +26,6 @@ def playVideo(route):
 
         ret, frame = capture.read()
         # detector = HomogeneousBgDetector()
-        cv2.imshow("Image1", frame)
         sizecheck = object_size_check()
 
         # contours = detector.detect_objects(frame)  # 오츠의 기법 ?
@@ -37,38 +35,59 @@ def playVideo(route):
         cv2.drawContours(frame, contours, -1, (255, 255, 0), 3)
 
         for cnt in contours:
-            scale = 2.80
+            sizescale = 2.80
+            areascale = 2.80
             sizecheck_ = sizecheck.size_check(roundlist, roundcnt)
-            now = datetime.now()
-            second = now.second
-            length = cv2.arcLength(cnt, closed=True) / scale
+
+            length = cv2.arcLength(cnt, closed=True) / sizescale
             # print("윤곽선의 총 길이", length)
             matchpoint = cv2.matchShapes(target_contours[0], cnt, cv2.CONTOURS_MATCH_I3, 0.0)
             # print("매칭 점수", matchpoint)
+            area = cv2.contourArea(cnt, oriented=None) / areascale
+
             rect = cv2.minAreaRect(cnt)  # 이걸 수정
             (x, y), (w, h), angle = rect  # x, y 센터값 w, h 폭 길이, angle 기울기
-            cv2.putText(frame, "round {} cm".format(round(length, 1)), (int(x + 70), int(y - 30)),
+            cv2.putText(frame, "round {} mm".format(round(length, 1)), (int(x + 70), int(y - 30)),
                         cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
             cv2.putText(frame, "matchpoint {} ".format(round(matchpoint, 4)), (int(x + 70), int(y + 30)),
                         cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
+            cv2.putText(frame, "area {} mm x mm ".format(round(area, 1)), (int(x + 70), int(y + 15)),
+                        cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
+
+
             roundlist.append(length)
             matchlist.append(matchpoint)
-            if len(roundlist) > 100 :
+            arealist.append(area)
+
+            if len(roundlist) > 200 :
                 if sizecheck_ == False:
                     print("다른 객체 인식")
 
-                    print(sizecheck.calculat_size(rulebase.del_arr(100, roundlist)))
-                    rsz_ = sizecheck.calculat_size(rulebase.del_arr(100, roundlist))
-                    print(sizecheck.calculat_size(rulebase.del_arr(100, matchlist)))
-                    mtz_ = sizecheck.calculat_size(rulebase.del_arr(100, matchlist))
-                    roundlist.clear()
-                    matchlist.clear()
-                    #print(rulebase.rule_algorithm(real_size, rsz_, real_match_point, mtz_)) # true false값
+                    rsz_, mtz_, arz_ = rulebase.del_arr(r_size, roundlist, matchlist, arealist)
+
+                    rsz = sizecheck.calculat_size(rsz_)
+
+                    mtz = sizecheck.calculat_size(mtz_)
+
+                    arz = sizecheck.calculat_size(arz_)
+
+                    print(rsz, mtz, arz)
+
+                    roundlist = []
+                    matchlist = []
+                    arealist = []
+                    roundcnt = -1
+
+
+
+                    print(rulebase.rule_algorithm(r_size, rsz, mtz, r_area, arz)) # true false값
+                    break
+
+
 
 
 
             roundcnt += 1
-
         cv2.imshow("Image", frame)
 
         # Draw objects boundaries

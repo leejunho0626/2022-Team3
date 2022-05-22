@@ -13,9 +13,12 @@ class object_size_check():
         addlist1 = 0
         addlist2 = 0
         while i < 10 :
-            addlist1 = addlist1 + list_[cnt -19 + i]
-            addlist2 = addlist2 + list_[cnt - 10 + i]
-            i += 1
+            if (cnt - 19 + i) < len(list_) :
+                addlist1 = addlist1 + list_[cnt - 19 + i]
+                addlist2 = addlist2 + list_[cnt - 10 + i]
+                i += 1
+
+
 
 
         addlist1 = abs(addlist1 - addlist2)
@@ -27,44 +30,11 @@ class object_size_check():
 
 
     def calculat_size(self, list_):
-        count = []
-        i = 0
-        cnt = 0
 
-        while i < len(list_):
-            count.append(round(list_[i]))
-            i += 1
 
-        i = 0
-        num = 0
-        temp = 0
-        tmp = 0
 
-        while i < len(count):
-            num = count[i]
-            j = 0
-            while j < len(count):
-                if num == count[j]:
-                    cnt += 1
-                j += 1
-            if temp < cnt:
-                tmp = num
-                temp = cnt
-            cnt = 0
 
-            i += 1
-
-        i = 0
-        cnt = 0
-        add = 0
-        while i < len(list_):
-            if tmp - 1.5 < list_[i] < tmp + 1.5:
-                add += list_[i]
-                cnt += 1
-
-            i += 1
-
-        return add / cnt
+        return sum(list_) / len(list_)
 
         #cnt 39라 가정
         #cnt 29~39 값 cnt 19~29 값 비교

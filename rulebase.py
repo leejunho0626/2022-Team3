@@ -1,40 +1,45 @@
-def rule_algorithm(real_size, size, real_match_point, match_point) :
+def rule_algorithm(real_size, size, match_point, real_area, area) :
 
-    siz_ = false
-    mat_ = false
+    siz_ = False
+    mat_ = False
+    arz_ = False
     if abs(size - real_size) < 50 :
-        siz_ = true
+        siz_ = True
 
 
-    if abs(real_match_point - match_point) < 50 :
-        mat_ = true
+    if match_point < 1 :
+        mat_ = True
+
+    if abs(real_area - area) < 50 :
+        arz_ = False
 
 
-
-    if siz_ and mat_ == true :
-        return true
+    if siz_ and mat_ and arz_ == True :
+        return True
 
     else :
-        return false
+        return False
 
 
 
 
 
 
-def del_arr(error_range, list) :
+def del_arr(error_range, sizelist, matchlist, arealist) :
 
     i = 0
-    while i < len(a):
+    while i < len(sizelist):
 
-        if abs(a[i] - error_range) > 2:
-            del a[i]
+        if abs(sizelist[i] - error_range) > 50:
+            del sizelist[i]
+            del matchlist[i]
+            del arealist[i]
 
 
         else:
             i = i + 1
 
 
-    return list
+    return sizelist, matchlist, arealist
 
 
