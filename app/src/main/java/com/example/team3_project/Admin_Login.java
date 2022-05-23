@@ -65,6 +65,7 @@ public class Admin_Login extends AppCompatActivity {
                     String data = snapshot.getValue().toString();
                     Intent intent = new Intent(Admin_Login.this, All_DataList.class); //화면 전환
                     intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("admin", aID );
                     startActivity(intent);
                 }
                 //로그인 실패

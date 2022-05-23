@@ -65,8 +65,12 @@ public class All_DataList extends AppCompatActivity {
         all_adapter = new All_Adapter();
         recyclerView = findViewById(R.id.recyceler_allResult);
         recyclerView.setLayoutManager(new LinearLayoutManager(All_DataList.this, RecyclerView.VERTICAL, false));
-        
-        txt_aID.setText("관리지 번호");
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        String aID = bundle.getString("admin");
+
+        txt_aID.setText(aID);
         aResult_check();
 
         //플로팅메뉴
