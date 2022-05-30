@@ -3,7 +3,10 @@ def rule_algorithm(real_size, size, match_point, real_area, area) :
     siz_ = False
     mat_ = False
     arz_ = False
-    if abs(size - real_size) < 50 :
+
+    # 물체 1%
+
+    if abs(size - real_size) < real_size / 10:
         siz_ = True
 
 
@@ -11,7 +14,7 @@ def rule_algorithm(real_size, size, match_point, real_area, area) :
         mat_ = True
 
     if abs(real_area - area) < 50 :
-        arz_ = False
+        arz_ = True
 
 
     if siz_ and mat_ and arz_ == True :
@@ -43,3 +46,8 @@ def del_arr(error_range, sizelist, matchlist, arealist) :
     return sizelist, matchlist, arealist
 
 
+def scale_chcek(size, sizescale, area, areascale) :
+    s_scale = size / a4scale
+    a_scale = area/ areascale
+
+    return s_scale, areascale
