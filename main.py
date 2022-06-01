@@ -73,7 +73,7 @@ def inputValue(id, window):
         btn_imgRegister.config(fg='blue')
 
         btn_register = Button(window2, text="등록",
-                              command=lambda : measure_object_size.playVideo(route, user),
+                              command=lambda : measure_object_size.playVideo(route, user, ent_round.get(), ent_area.get()),
                               width=20, height=1, relief='solid'
                               )
         btn_register.grid(row=6, column=3, pady=10)
