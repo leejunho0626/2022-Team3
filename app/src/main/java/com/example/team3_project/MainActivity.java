@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     //2. 저장시킬 노드 참조객체 가져오기
     DatabaseReference ref = firebaseDatabase.getReference(); //()안에 내용이 없으면 최상위 노드
 
+    SwipeRefreshLayout refresh_layout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +70,28 @@ public class MainActivity extends AppCompatActivity {
         main_adapter = new Main_Adapter();
         recyclerView = findViewById(R.id.recyceler_result);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL, false));
+        refresh_layout = findViewById(R.id.refresh_layout);
 
         txt_uID.setText(user.getEmail());
         result_check();
+
+        refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                main_adapter.arrResult.clear();
+                main_adapter.arrValue.clear();
+                main_adapter.arrUser.clear();
+                main_adapter.arrTime.clear();
+
+                // 새로고침 코드를 작성
+                result_check();
+                main_adapter.notifyDataSetChanged();
+
+                // 새로고침 완료시,
+                // 새로고침 아이콘이 사라질 수 있게 isRefreshing = false
+                refresh_layout.setRefreshing(false);
+            }
+        });
 
         //플로팅메뉴
         fab.setOnClickListener(new Button.OnClickListener() {
@@ -121,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         String round = str.substring(target_num3,(str.substring(target_num3).indexOf(",")+target_num3));
                         String round2 = round.substring(round.indexOf("=")+1);
 
-                        String value = area2+"/"+round2;
+                        String value = round2+"/"+area2;
 
                         String target4 = "user=";
                         int target_num4 = str.indexOf(target4);
@@ -138,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
                         main_adapter.setArrayData(result2, value, user2, time2);
                         System.out.println(document.getData().toString());
                         recyclerView.setAdapter(main_adapter);
+
+
                     }
                 }
             }

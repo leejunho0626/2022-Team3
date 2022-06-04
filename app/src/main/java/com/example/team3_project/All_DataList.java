@@ -135,7 +135,7 @@ public class All_DataList extends AppCompatActivity {
                                         String round = str.substring(target_num3,(str.substring(target_num3).indexOf(",")+target_num3));
                                         String round2 = round.substring(round.indexOf("=")+1);
 
-                                        String value = area2+"/"+round2;
+                                        String value = round2+"/"+area2;
 
                                         String target4 = "user=";
                                         int target_num4 = str.indexOf(target4);

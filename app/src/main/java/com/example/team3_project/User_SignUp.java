@@ -31,7 +31,7 @@ import static android.content.ContentValues.TAG;
 public class User_SignUp extends AppCompatActivity {
 
     Button btn_uConfirm;
-    EditText edt_uID, edt_uPW, edt_uPW2;
+    EditText edt_uID, edt_uPW;
     private FirebaseAuth firebaseAuth; //FirebaseAuth 선언
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
@@ -49,7 +49,7 @@ public class User_SignUp extends AppCompatActivity {
         btn_uConfirm = findViewById(R.id.btn_uConfirm);
         edt_uID = findViewById(R.id.edt_uID);
         edt_uPW = findViewById(R.id.edt_uPW);
-        edt_uPW2 = findViewById(R.id.edt_uPW2);
+
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -58,7 +58,7 @@ public class User_SignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final String id = edt_uID.getText().toString().trim();
-                final String pw = edt_uPW2.getText().toString().trim();
+                final String pw = edt_uPW.getText().toString().trim();
                 //입력한 아이디와 비밀번호가 있을 경우
                 if(id.length()>0&&pw.length()>0){
                     firebaseAuth.createUserWithEmailAndPassword(id, pw).addOnCompleteListener(User_SignUp.this, new OnCompleteListener<AuthResult>() {
@@ -78,7 +78,7 @@ public class User_SignUp extends AppCompatActivity {
                                 finish();
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "회원가입 실패.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "회원가입 진행을 다시 해주세요.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
