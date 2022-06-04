@@ -1,27 +1,21 @@
-from measure_object_size import *
-import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 from firebase_admin import auth
 from firebase_admin import firestore
-import random
-from datetime import datetime
 from tkinter import *
 import tkinter.messagebox
 import tkinter.font as tkFont
 from tkinter import filedialog
 import shutil
 import os
-
 import measure_object_size
-
 
 # Firebase database 인증 및 앱 초기화(Realtime Database, Firestore Database)
 cred = credentials.Certificate('key.json')
 
 database = firestore.client()  # Firestore Database
 
-route = "C:/3Team/img.jpg"
+route = "C:/3Team/img.jpg" ## 이미지 저장 경로
 
 
 # 정상 기준치 입력 화면
@@ -51,32 +45,40 @@ def inputValue(id, window):
         label_round.grid(row=2, column=2)
 
         ent_round = Entry(window2)
-        ent_round.grid(row=2, column=3, pady=10)
+        ent_round.grid(row=2, column=3, pady=3)
         ent_round.config(highlightthickness=1)
 
         label_area = Label(window2, text="넓이를 입력하세요.", bg='orange', font=("맑은 고딕", 10, "bold"))
         label_area.grid(row=3, column=2)
 
         ent_area = Entry(window2)
-        ent_area.grid(row=3, column=3, pady=10)
+        ent_area.grid(row=3, column=3, pady=3)
         ent_area.config(highlightthickness=1)
-
-        label_img = Label(window2, text="사진을 등록하세요.", bg='orange', font=("맑은 고딕", 10, "bold"))
-        label_img.grid(row=4, column=2)
 
         btn_imgRegister = Button(window2, text="사진 선택",
                                  command=lambda: fLoad(window2),
                                  width=20, height=1, relief='raised'
                                  )
 
-        btn_imgRegister.grid(row=4, column=3, pady=10)
+        btn_imgRegister.grid(row=4, column=3, pady=3)
         btn_imgRegister.config(fg='blue')
 
-        btn_register = Button(window2, text="등록",
+        label_img = Label(window2, text="사진을 등록하세요.", bg='orange', font=("맑은 고딕", 10, "bold"))
+        label_img.grid(row=4, column=2)
+
+        btn_imgRegister = Button(window2, text="스케일 측정",
+                                 command=lambda: scaleMsg(),
+                                 width=20, height=1, relief='raised'
+                                 )
+
+        btn_imgRegister.grid(row=6, column=3, pady=3)
+        btn_imgRegister.config(fg='blue')
+
+        btn_register = Button(window2, text="검사 시작",
                               command=lambda : measure_object_size.playVideo(route, user, ent_round.get(), ent_area.get()),
                               width=20, height=1, relief='solid'
                               )
-        btn_register.grid(row=6, column=3, pady=10)
+        btn_register.grid(row=7, column=3, pady=10)
         btn_register.config(fg='blue')
 
         window2.mainloop()
@@ -84,6 +86,12 @@ def inputValue(id, window):
     except:
         print("오류")
         msg = tkinter.messagebox.showinfo('로그인 실패', '입력한 정보가 올바르지 않습니다.')
+
+
+# 스케일 측정 확인 메시지
+def scaleMsg():
+    tkinter.messagebox.showinfo('스케일 측정', '스케일 측정이 자동으로 되었습니다.')
+
 
 
 # 파일 선택
@@ -101,7 +109,13 @@ def fLoad(window):
             raise
 
     route = "C:/3Team/img.jpg"  # 새로 복사할 경로
-    shutil.copyfile(img, route)
+    
+    try:
+        shutil.copyfile(img, route)
+    except:
+        tkinter.messagebox.showinfo('사진 선택 오류', '사진을 다시 선택해주세요.')
+    
+
 
 # 크기 값 받아오기
 def size_data(round, area):
@@ -113,26 +127,30 @@ def size_data(round, area):
 
 # 계정 생성
 def createUser(id, pw, window):
-    print(id, pw)
-    msg = tkinter.messagebox.askquestion('회원가입', '회원가입을 하시겠습니까?')
-    if msg == 'yes':
-        print('네')
+    try:
+        print(id, pw)
+        msg = tkinter.messagebox.askquestion('회원가입', '회원가입을 하시겠습니까?')
+        if msg == 'yes':
+            print('네')
 
-        user = auth.create_user(
-            email=id,
-            email_verified=False,
-            password=pw)
+            user = auth.create_user(
+                email=id,
+                email_verified=False,
+                password=pw)
 
-        ref = db.reference(user.uid)
-        ref.update({'id': id})
-        ref.update({'pw': pw})
+            ref = db.reference(user.uid)
+            ref.update({'id': id})
+            ref.update({'pw': pw})
 
-        print('회원가입 완료')
-        window.destroy()
-        signIn()
+            print('회원가입 완료')
+            window.destroy()
+            signIn()
 
-    else:
-        tkinter.messagebox.showinfo('취소', '취소되었습니다.')
+        else:
+            tkinter.messagebox.showinfo('취소', '취소되었습니다.')
+    except:
+        tkinter.messagebox.showinfo('실패', '아이디 또는 비밀번호를 입력하세요.')
+
 
 
 # 회원 가입 화면
@@ -140,116 +158,45 @@ def signUp(window):
     window.destroy()
     window4 = Tk()
     window4.title('Error Detector')
-    window4.geometry('400x300+700+300')
+    window4.geometry('450x300+700+300')
     window4.resizable(False, False)
     window4.config(bg='orange')
     font2 = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
+    font3 = tkFont.Font(family="맑은 고딕", size=12, weight="bold")
 
     labSignUp = Label(window4, bg='orange', font=font2)
-    labSignUp['text'] = '\n회원가입'
-    labSignUp.grid(row=0, column=3)
+    labSignUp['text'] = '\n회원가입\n'
+    labSignUp.grid(row=0, column=1)
 
-    labuID = Label(window4, bg='orange', font=font2)
-    labuID['text'] = 'ID'
-    labuID.grid(row=1, column=2, padx=50, pady=10)
+    labuID = Label(window4, bg='orange', font=font3)
+    labuID['text'] = '아이디(이메일)'
+    labuID.grid(row=1, column=1, padx=170)
 
     entuID = Entry(window4)
-    entuID.grid(row=1, column=3)
+    entuID.grid(row=2, column=1)
     entuID.config(highlightthickness=1)
 
-    labuPW = Label(window4, bg='orange', font=font2)
-    labuPW['text'] = 'PW'
-    labuPW.grid(row=2, column=2, padx=50)
+    labuPW = Label(window4, bg='orange', font=font3)
+    labuPW['text'] = '비밀번호'
+    labuPW.grid(row=3, column=1, padx=50)
 
     entuPW = Entry(window4)
     entuPW.config(show="*")
-    entuPW.grid(row=2, column=3)
+    entuPW.grid(row=4, column=1)
     entuPW.config(highlightthickness=1)
 
     btnRegister = Button(window4, text="가입하기",
                          command=lambda: createUser(entuID.get(), entuPW.get(), window4),
                          width=20, height=1, relief='solid')
-    btnRegister.grid(row=3, column=3, pady=10)
+    btnRegister.grid(row=5, column=1, pady=10)
     btnRegister.config(fg='blue')
 
     btnReturn = Button(window4, text="← 이전으로",
                        command=lambda: [window4.destroy(), signIn()], width=20, height=1, relief='solid')
-    btnReturn.grid(row=4, column=3)
+    btnReturn.grid(row=6, column=1)
     btnReturn.config(fg='blue')
 
     window4.mainloop()
-
-
-# 제품 검사 진행 메시지 박스
-def messagePrint(id, w, round, area):
-    print('아이디:', id, round)
-    msg = tkinter.messagebox.askquestion('등록 완료', '제품 검사를 진행하시겠습니까?')
-    if msg == 'yes':
-        print('진행')
-
-        ##검사 진행
-        w.destroy()
-        checkStart(id, round, area)
-
-
-    else:
-        tkinter.messagebox.showinfo('취소', '취소되었습니다.')
-
-
-# 제품 측정 시작 화면
-def checkStart(id, round, area):
-    window3 = Tk()
-    window3.title('Error Detector')
-    window3.geometry('600x600+500+100')
-    window3.resizable(False, False)
-    Label(window3, text="검사 진행 제품 측정").grid(row=0, column=0, padx=10, pady=10)
-
-    # 임의값 생성(테스트용)
-
-    result_round = []
-    result_area = []
-
-    # 둘레
-    for i in range(1, 6):
-        x = random.randrange(10, 20)
-        result_round.append(x)
-        print(result_round)
-    # 넓이
-    for i in range(1, 6):
-        x = random.randrange(10, 20)
-        result_area.append(x)
-        print(result_area)
-
-    number = 0
-    for test in result_round:
-        number = number + 1  # 순서
-        # 정상일 때
-        if test == int(round):  # 정상 조건
-            print("%d번 정상" % number)
-            # 데이터 DB에 전송
-            now = datetime.now()  # 시간
-            doc_ref = database.collection(id).document(str(number))
-            doc_ref.set({
-                u'round': result_round[number - 1],  # 배열[number]하면 배열[1]부터 시작하기 때문에 배열[0]부터 하기위해서 -1을 함.
-                u'area': result_area[number - 1],
-                u'user': id,
-                u'result': '정상',
-                u'time': str(now.strftime('%Y-%m-%d %H:%M:%S'))
-            })
-        # 불량일 때
-        else:
-            print("%d번 불량" % number)
-            # 데이터 DB에 전송
-            now = datetime.now()
-            doc_ref = database.collection(id).document(str(number))
-            doc_ref.set({
-                u'round': result_round[number - 1],
-                u'area': result_area[number - 1],
-                u'user': id,
-                u'result': '불량',
-                u'time': str(now.strftime('%Y-%m-%d %H:%M:%S'))
-            })
-
 
 # 로그인 판단
 def checkInfo(id, pw, window):
@@ -281,21 +228,21 @@ def signIn():
     window.geometry('400x300+700+300')
     window.resizable(False, False)
     window.config(bg='orange')
-    font = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
+    font = tkFont.Font(family="맑은 고딕", size=12, weight="bold")
     labMain = Label(window, bg='orange', font=font)
-    labMain['text'] = '\n Error Detector'
-    labMain.grid(row=0, column=3)
+    labMain['text'] = '\n\n Error Detector'
+    labMain.grid(row=0, column=1, columnspan=3)
 
     labID = Label(window, bg='orange', font=font)
-    labID['text'] = 'ID'
-    labID.grid(row=1, column=2, padx=50)
+    labID['text'] = '아이디(이메일)'
+    labID.grid(row=1, column=2)
 
     ent1 = Entry(window, font=("맑은 고딕", 10, "bold"))
     ent1.grid(row=1, column=3)
     ent1.config(highlightthickness=1)
 
     labPW = Label(window, bg='orange', font=font)
-    labPW['text'] = 'PW'
+    labPW['text'] = '비밀번호'
     labPW.grid(row=2, column=2, padx=50)
 
     ent2 = Entry(window, font=("맑은 고딕", 10, "bold"))

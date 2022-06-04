@@ -24,10 +24,6 @@ def rule_algorithm(real_size, size, match_point, real_area, area) :
         return False
 
 
-
-
-
-
 def del_arr(error_range, sizelist, matchlist, arealist) :
 
     i = 0
@@ -47,7 +43,7 @@ def del_arr(error_range, sizelist, matchlist, arealist) :
 
 
 def scale_chcek(size, sizescale, area, areascale) :
-    s_scale = size / a4scale
+    s_scale = size / areascale
     a_scale = area/ areascale
 
     return s_scale, areascale

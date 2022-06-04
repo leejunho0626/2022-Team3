@@ -1,20 +1,18 @@
+import tkinter
 from datetime import datetime
 
 import cv2
+
 import rulebase
 import firebase_admin
-
 from object_detector import *
 from object_size_check import *
 import numpy as np
 import utils
-from rulebase import *
-
 from firebase_admin import credentials
-from firebase_admin import db
-from firebase_admin import auth
 from firebase_admin import firestore
-
+from tkinter import *
+import numpy as np
 # Firebase database 인증 및 앱 초기화(Realtime Database, Firestore Database)
 cred = credentials.Certificate('key.json')
 firebase_admin.initialize_app(cred, {
@@ -26,26 +24,32 @@ database = firestore.client()  # Firestore Database
 brightness = 50
 trackbars = np.uint8(np.full((410, 594, 3), 255))  # 트랙바 크기조절
 
+
 def brightness_change(x):
     global brightness
     brightness = x
+
 
 def playVideo(route, user, r_size, r_area):
     cnt_ = 1
     capture = cv2.VideoCapture(0)
 
-    cv2.imshow('frame', trackbars)
+    if(capture.isOpened() == False):
+        print("카메라를 연결해주세요.")
 
-    cv2.createTrackbar('Brightness', 'frame', 0, 50, brightness_change)  # 트랙바 범위조절
 
+
+    cv2.imshow('Error Detector', trackbars)
+
+    cv2.createTrackbar('Brightness', 'Error Detector', 0, 25, brightness_change)  # 트랙바 범위조절
 
 
     target = cv2.imread(route)  # 매칭 대상
     capture.set(cv2.CAP_PROP_FRAME_WIDTH, 420)
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 594)
 
-
     i = 0
+
     roundlist = []
     roundcnt = 0
     matchlist = []
@@ -53,24 +57,15 @@ def playVideo(route, user, r_size, r_area):
 
     target_detector = HomogeneousBgDetector()
     target_contours = target_detector.detect_objects(target)
-
     scalecheck_ = 1
 
-    while cv2.waitKey() != 27:
-        image2 = np.zeros((500, 500, 3), np.uint8)
-        if cv2.waitKey() == ord('s'):
-            print("stop")
-            cv2.putText(image2, "Stop!".format(round(length, 1)), (int(x + 70), int(y - 30)),
-                        cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
+    while cv2.waitKey(33) < 0:
 
-        elif cv2.waitKey() == ord('p'):
-            print("play")
 
 
         ret, frame = capture.read()
         # detector = HomogeneousBgDetector()
         sizecheck = object_size_check()
-
 
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)  # RGB를 HSV(색상 명도 채도)로 변경
         h, s, v = cv2.split(hsv)  # 각각의 영역으로 분리
@@ -86,6 +81,8 @@ def playVideo(route, user, r_size, r_area):
 
         image = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
 
+
+
         # contours = detector.detect_objects(frame)  # 오츠의 기법 ?
 
         contours = utils.getContours(image)  # 캐니에지 기법
@@ -95,12 +92,12 @@ def playVideo(route, user, r_size, r_area):
         for cnt in contours:
             sizescale = 8.2156
             areascale = 600.269
-            #if scalecheck_ == 1 :
+
+            # if scalecheck_ == 1 :
             #    scalecheck_ = 0;
             #    length = cv2.arcLength(cnt, closed=True)
             #    area = cv2.contourArea(cnt, oriented=None)
             #    sizescale, areascale = scale_chcek(length, 5, area, 25)
-
 
             sizecheck_ = sizecheck.size_check(roundlist, roundcnt)
 
@@ -120,15 +117,15 @@ def playVideo(route, user, r_size, r_area):
                         cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
 
 
+
             roundlist.append(length)
             matchlist.append(matchpoint)
             arealist.append(area)
 
-            if len(roundlist) > 30 :
+
+            if len(roundlist) > 30:
                 if sizecheck_ == False:
                     print("다른 객체 인식")
-
-                    #rsz_, mtz_, arz_ = rulebase.del_arr(200, roundlist, matchlist, arealist)
 
                     rsz = sizecheck.calculat_size(roundlist)
 
@@ -136,12 +133,13 @@ def playVideo(route, user, r_size, r_area):
 
                     arz = sizecheck.calculat_size(arealist)
 
-
                     print(rsz, mtz, arz)
 
                     now = datetime.now()  # 시간
                     print(now)
                     print(str(rulebase.rule_algorithm(200, rsz, mtz, 250, arz)))
+
+                    # DB에 데이터 전송
                     doc_ref = database.collection(user).document(str(cnt_))
                     doc_ref.set({
                         u'round': str(rsz),
@@ -157,15 +155,12 @@ def playVideo(route, user, r_size, r_area):
                     roundcnt = -1
                     cnt_ += 1
 
-
-                continue
-
-
-
-
+                break
 
             roundcnt += 1
-        cv2.imshow("frame", image)
+
+        cv2.imshow("Error Detector", image)
+
 
         # Draw objects boundaries
 
