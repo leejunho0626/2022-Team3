@@ -23,7 +23,7 @@ class object_size_check():
 
         addlist1 = abs(addlist1 - addlist2)
 
-        if addlist1 < 300 : return True
+        if addlist1 < 30 : return True
         else: return False         # 픽셀값의 차이가 15000이상 난다면 ?
 
 
