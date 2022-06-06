@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class All_DataList extends AppCompatActivity {
     //2. 저장시킬 노드 참조객체 가져오기
     DatabaseReference ref = firebaseDatabase.getReference(); //()안에 내용이 없으면 최상위 노드
 
+    SwipeRefreshLayout refresh_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class All_DataList extends AppCompatActivity {
         all_adapter = new All_Adapter();
         recyclerView = findViewById(R.id.recyceler_allResult);
         recyclerView.setLayoutManager(new LinearLayoutManager(All_DataList.this, RecyclerView.VERTICAL, false));
+        refresh_layout = findViewById(R.id.aRefresh_layout);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -72,6 +75,24 @@ public class All_DataList extends AppCompatActivity {
 
         txt_aID.setText(aID);
         aResult_check();
+
+        refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                all_adapter.arrResult.clear();
+                all_adapter.arrValue.clear();
+                all_adapter.arrUser.clear();
+                all_adapter.arrTime.clear();
+
+                // 새로고침 코드를 작성
+                aResult_check();
+                all_adapter.notifyDataSetChanged();
+
+                // 새로고침 완료시,
+                // 새로고침 아이콘이 사라질 수 있게 isRefreshing = false
+                refresh_layout.setRefreshing(false);
+            }
+        });
 
         //플로팅메뉴
         fab.setOnClickListener(new Button.OnClickListener() {

@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 public class Admin_SignUp extends AppCompatActivity {
 
+    TextView txtErr;
     Button btn_aFinish;
     EditText edt_aID;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -39,6 +41,7 @@ public class Admin_SignUp extends AppCompatActivity {
         setContentView(R.layout.admin_signup);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //다크모드 해제
 
+        txtErr = findViewById(R.id.txtErr);
         btn_aFinish = findViewById(R.id.btn_aFinish);
         edt_aID = findViewById(R.id.edt_aID);
 
@@ -90,8 +93,10 @@ public class Admin_SignUp extends AppCompatActivity {
                     //이미 등록된 번호일 때
                     try{
                         String data = snapshot.getValue().toString();
-                        Toast.makeText(getApplicationContext(), "이미 등록된 번호입니다.", Toast.LENGTH_SHORT).show();
-                        
+                        if(data != null){
+                            txtErr.setVisibility(View.VISIBLE);
+                        }
+
                     }
                     //신규 등록일 때
                     catch (NullPointerException e){

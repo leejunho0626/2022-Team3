@@ -1,6 +1,7 @@
 package com.example.team3_project;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,11 @@ public class All_Adapter extends RecyclerView.Adapter<ViewHolder> {
         String value= arrValue.get(position);
         String result = arrResult.get(position);
         String user = arrUser.get(position);
+
+        if(result.equals("정상")){
+            holder.txt_result.setTextColor(Color.BLUE);
+            holder.txt_result.setText(position+1+". "+result);
+        }
 
         holder.txt_result.setText(position+1+". "+result);
         holder.txt_value.setText(value);

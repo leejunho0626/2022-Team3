@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
                 main_adapter.arrResult.clear();
                 main_adapter.arrValue.clear();
-                main_adapter.arrUser.clear();
                 main_adapter.arrTime.clear();
 
                 // 새로고침 코드를 작성
@@ -123,9 +122,10 @@ public class MainActivity extends AppCompatActivity {
         db.collection(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for (QueryDocumentSnapshot document : task.getResult()){
-                        String str = document.getData().toString();
+                QuerySnapshot document = task.getResult();
+                if(!document.isEmpty()){
+                    for (QueryDocumentSnapshot document1 : task.getResult()){
+                        String str = document1.getData().toString();
 
                         String target5 = "result=";
                         int target_num5 = str.indexOf(target5);
@@ -156,13 +156,15 @@ public class MainActivity extends AppCompatActivity {
                         String time2 = time.substring(time.indexOf("=")+1);
 
 
-
-                        main_adapter.setArrayData(result2, value, user2, time2);
-                        System.out.println(document.getData().toString());
+                        main_adapter.setArrayData(result2, value, time2);
                         recyclerView.setAdapter(main_adapter);
 
 
                     }
+                }
+                else {
+                    main_adapter.setArrayData("결과 데이터가 없습니다.", "", "");
+                    recyclerView.setAdapter(main_adapter);
                 }
             }
         });

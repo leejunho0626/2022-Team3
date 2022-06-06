@@ -61,6 +61,19 @@
                 android:inputType="number"
                 tools:ignore="MissingConstraints" />
 
+            <TextView
+                android:id="@+id/txtErr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이미 등록된 번호입니다."
+                android:textColor="#F44336"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:paddingTop="10dp"
+                android:layout_gravity="left"
+                android:visibility="invisible"
+                tools:ignore="MissingConstraints"/>
+
             //회원가입 버튼
 
             <Button
