@@ -19,7 +19,7 @@ import re
 
 
 # Firebase database 인증 및 앱 초기화(Realtime Database, Firestore Database)
-cred = credentials.Certificate('key.json')
+cred = credentials.Certificate('C:/Users/dongl/PycharmProjects/pythonProject1/key.json')
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://teamproject-642cf-default-rtdb.firebaseio.com/'
     # 'databaseURL' : '데이터 베이스 url'
@@ -40,7 +40,7 @@ def playVideo(route, user, r_size, r_area):
 
 
     cnt_ = 1
-    capture = cv2.VideoCapture(0)
+    capture = cv2.VideoCapture(1)
 
     users_ref = database.collection(u'scale')
     docs = users_ref.stream()
@@ -58,6 +58,7 @@ def playVideo(route, user, r_size, r_area):
         tmp = sizescale
         sizescale = areascale
         areascale = tmp
+
 
 
     cv2.imshow('frame', trackbars)
@@ -80,7 +81,7 @@ def playVideo(route, user, r_size, r_area):
 
     # scalecheck_ = 1
 
-    while cv2.waitKey(33) < 0:
+    while cv2.waitKey(33) != ord('q') :
 
         if re.sub(r'[^0-9]', '', r_size) == "":
             tkinter.messagebox.showinfo("값 입력 오류", "값이 올바르지 않습니다.")
@@ -128,11 +129,11 @@ def playVideo(route, user, r_size, r_area):
             rect = cv2.minAreaRect(cnt)  # 이걸 수정
             (x, y), (w, h), angle = rect  # x, y 센터값 w, h 폭 길이, angle 기울기
             cv2.putText(image, "round {} mm".format(round(length, 1)), (int(x + 70), int(y - 30)),
-                        cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
+                        cv2.FONT_HERSHEY_PLAIN, 1.5, (100, 200, 0), 2)
             cv2.putText(image, "matchpoint {} ".format(round(matchpoint, 4)), (int(x + 70), int(y + 30)),
-                        cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
-            cv2.putText(image, "area {} mm x mm ".format(round(area, 1)), (int(x + 70), int(y + 15)),
-                        cv2.FONT_HERSHEY_PLAIN, 1, (100, 200, 0), 2)
+                        cv2.FONT_HERSHEY_PLAIN, 1.5, (100, 200, 0), 2)
+            cv2.putText(image, "area {} mm x mm ".format(round(area, 1)), (int(x + 70), int(y)),
+                        cv2.FONT_HERSHEY_PLAIN, 1.5, (100, 200, 0), 2)
 
 
             roundlist.append(length)
@@ -220,7 +221,7 @@ def playscale(user):
     arealist = []
 
 
-    while cv2.waitKey(33) < 0:
+    while cv2.waitKey(33) != ord('q'):
         ret, frame = capture.read()
         sizecheck = object_size_check()
 
@@ -258,6 +259,10 @@ def playscale(user):
                 doc_ref = database.collection("scale").document(user)
                 doc_ref.set({
                     u'size': str(s_scale),
+
+
+
+                    
                     u'area': str(a_scale)
                 })
 
@@ -285,10 +290,9 @@ def onlyVideo():
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 594)
 
 
-    while cv2.waitKey(33) < 0:
+    while cv2.waitKey(33) != ord('q'):
         ret, frame = capture.read()
         cv2.imshow("frame", frame)
 
     capture.release()
     cv2.destroyAllWindows()
-

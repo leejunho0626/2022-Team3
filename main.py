@@ -11,7 +11,7 @@ import os
 import measure_object_size
 
 # Firebase database 인증 및 앱 초기화(Realtime Database, Firestore Database)
-cred = credentials.Certificate('key.json')
+cred = credentials.Certificate('C:/Users/dongl/PycharmProjects/pythonProject1/key.json')
 
 database = firestore.client()  # Firestore Database
 
@@ -27,6 +27,7 @@ def inputValue(id, window):
         window2.title('Error Detector')
         window2.geometry('450x350+600+200')
         window2.resizable(False, False)
+        window2.iconbitmap('C:/Users/dongl/PycharmProjects/pythonProject1/cloud.ico')
         window2.config(bg='orange')
         font3 = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
         font4 = tkFont.Font(family="맑은 고딕", size=10, weight="bold")
@@ -104,7 +105,7 @@ def fLoad(window):
     img = filedialog.askopenfilename(initialdir='/', title="select a file", )  # 파일 선택, 선택한 파일 경로를 img 변수에 저장
 
     label_imgFile = Label(window, text=img, bg='orange', font=("맑은 고딕", 10))  # 선택한 파일 경로 표시
-    label_imgFile.grid(row=5, column=2)
+    label_imgFile.grid(row=5, column=2, columnspan=2)
     print("경로", img)
     root_dir = 'C:/3Team'
     try:
@@ -159,6 +160,7 @@ def signUp(window):
     window4.title('Error Detector')
     window4.geometry('450x300+600+200')
     window4.resizable(False, False)
+    window4.iconbitmap('C:/Users/dongl/PycharmProjects/pythonProject1/cloud.ico')
     window4.config(bg='orange')
     font2 = tkFont.Font(family="맑은 고딕", size=15, weight="bold")
     font3 = tkFont.Font(family="맑은 고딕", size=12, weight="bold")
@@ -228,6 +230,7 @@ def signIn():
     window.title('Error Detector')
     window.geometry('400x300+600+200')
     window.resizable(False, False)
+    window.iconbitmap('C:/Users/dongl/PycharmProjects/pythonProject1/cloud.ico')
     window.config(bg='orange')
     font = tkFont.Font(family="맑은 고딕", size=12, weight="bold")
     labMain = Label(window, bg='orange', font=font)

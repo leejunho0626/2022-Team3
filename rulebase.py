@@ -6,14 +6,14 @@ def rule_algorithm(real_size, size, match_point, real_area, area) :
 
     # 물체 1%
 
-    if abs(size - real_size) < real_size / 100 * 10:
+    if abs(size - real_size) < real_size / 100 * 5:
         siz_ = True
 
 
     if match_point < 0.005 :
         mat_ = True
 
-    if abs(real_area - area) < real_area / 100 * 10 :
+    if abs(real_area - area) < real_area / 100 * 5:
         arz_ = True
 
 
