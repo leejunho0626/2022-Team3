@@ -58,8 +58,6 @@
                 android:inputType="textEmailAddress"
                 tools:ignore="MissingConstraints" />
 
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,7 +76,6 @@
                     android:layout_gravity="left"
                     tools:ignore="MissingConstraints"/>
 
-
             </LinearLayout>
 
             //비밀번호 입력창
@@ -92,11 +89,6 @@
                 android:paddingLeft="5dp"
                 android:hint=" 6자리 이상 입력하세요"
                 tools:ignore="MissingConstraints"/>
-
-
-
-
-
 
             //회원가입 버튼
             <Button

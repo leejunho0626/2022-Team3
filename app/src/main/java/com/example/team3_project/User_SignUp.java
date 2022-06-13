@@ -36,11 +36,8 @@ public class User_SignUp extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_signup);
@@ -49,7 +46,6 @@ public class User_SignUp extends AppCompatActivity {
         btn_uConfirm = findViewById(R.id.btn_uConfirm);
         edt_uID = findViewById(R.id.edt_uID);
         edt_uPW = findViewById(R.id.edt_uPW);
-
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -78,7 +74,7 @@ public class User_SignUp extends AppCompatActivity {
                                 finish();
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "회원가입 진행을 다시 해주세요.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "중복된 아이디이거나 올바르지 않은 형식입니다.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

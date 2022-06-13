@@ -44,11 +44,11 @@ public class All_DataList extends AppCompatActivity {
     RecyclerView recyclerView;
     All_Adapter all_adapter;
 
-    //1. Firebase 실시간DB 객체 얻어오기
-    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    //2. 저장시킬 노드 참조객체 가져오기
-    DatabaseReference ref = firebaseDatabase.getReference(); //()안에 내용이 없으면 최상위 노드
+    //Firebase 실시간DB 객체 얻어오기
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(); 
+    DatabaseReference ref = firebaseDatabase.getReference();
 
+    //새로고침
     SwipeRefreshLayout refresh_layout;
 
     @Override
@@ -84,12 +84,10 @@ public class All_DataList extends AppCompatActivity {
                 all_adapter.arrUser.clear();
                 all_adapter.arrTime.clear();
 
-                // 새로고침 코드를 작성
+                // 새로고침
                 aResult_check();
                 all_adapter.notifyDataSetChanged();
-
-                // 새로고침 완료시,
-                // 새로고침 아이콘이 사라질 수 있게 isRefreshing = false
+                // 새로고침 아이콘 사라짐
                 refresh_layout.setRefreshing(false);
             }
         });
@@ -136,9 +134,10 @@ public class All_DataList extends AppCompatActivity {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()){
                                     for(QueryDocumentSnapshot document : task.getResult()){
-                                        String str = document.getData().toString();
+                                        String str = document.getData().toString(); //저장된 DB 데이터 가져오기
                                         System.out.println("결과 : "+str);
 
+                                        //가져온 DB 데이터 자르기
                                         String target5 = "result=";
                                         int target_num5 = str.indexOf(target5);
                                         String result= str.substring(target_num5,(str.substring(target_num5).indexOf(",")+target_num5));
@@ -178,44 +177,7 @@ public class All_DataList extends AppCompatActivity {
 
                             }
                         });
-                        /*
-                        String target5 = "result=";
-                        int target_num5 = str.indexOf(target5);
-                        String result= str.substring(target_num5,(str.substring(target_num5).indexOf(",")+target_num5));
-                        String result2 = result.substring(result.indexOf("=")+1);
 
-
-
-
-                        String target2 = "area=";
-                        int target_num2 = str.indexOf(target2);
-                        String area = str.substring(target_num2,(str.substring(target_num2).indexOf(",")+target_num2));
-                        String area2 = area.substring(area.indexOf("=")+1);
-
-
-                        String target3 = "round=";
-                        int target_num3 = str.indexOf(target3);
-                        String round = str.substring(target_num3,(str.substring(target_num3).indexOf(",")+target_num3));
-                        String round2 = round.substring(round.indexOf("=")+1);
-
-                        String value = area2+"/"+round2;
-
-                        String target4 = "user=";
-                        int target_num4 = str.indexOf(target4);
-                        String user = str.substring(target_num4,(str.substring(target_num4).indexOf("}")+target_num4));
-                        String user2 = user.substring(user.indexOf("=")+1);
-
-                        String target = "time=";
-                        int target_num = str.indexOf(target);
-                        String time = str.substring(target_num,(str.substring(target_num).indexOf(",")+target_num));
-                        String time2 = time.substring(time.indexOf("=")+1);
-
-
-
-                        all_adapter.setArrayData(result2, value, user2, time2);
-                        System.out.println(document.getData().toString());
-                        recyclerView.setAdapter(all_adapter);
-                         */
                     }
                 }
                 else{

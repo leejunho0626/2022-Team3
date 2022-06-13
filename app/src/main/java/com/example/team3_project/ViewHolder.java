@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-
 class ViewHolder extends RecyclerView.ViewHolder{
     TextView txt_result, txt_time, txt_value, txt_user, uResult, uTime, uValue;
 

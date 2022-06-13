@@ -13,5 +13,12 @@
         android:background="@drawable/ic_baseline_camera_alt_24"
         android:layout_gravity="center"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Error Detector"
+        android:textStyle="bold"
+        android:textSize="40dp"/>
+
 
 </LinearLayout>

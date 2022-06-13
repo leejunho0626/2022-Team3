@@ -2,7 +2,6 @@ package com.example.team3_project;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -32,7 +31,7 @@ public class Login_Choice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Login_Choice.this, User_Login.class); //화면 전환
-                startActivity(intent); //사용자 회원가입 화면으로 이동
+                startActivity(intent); //검사원 회원가입 화면으로 이동
             }
         });
         //총괄자 버튼 클릭
@@ -40,7 +39,7 @@ public class Login_Choice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Login_Choice.this, Admin_Login.class); //화면 전환
-                startActivity(intent); //사용자 회원가입 화면으로 이동
+                startActivity(intent); //총괄자 회원가입 화면으로 이동
             }
         });
 

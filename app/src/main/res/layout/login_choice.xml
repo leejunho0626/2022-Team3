@@ -19,7 +19,8 @@
         <ImageView
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:background="@drawable/ic_baseline_camera_alt_24"/>
+            android:background="@drawable/ic_baseline_camera_alt_24"
+            android:layout_marginTop="30dp"/>
         <Button
             android:id="@+id/btnUser"
             android:layout_width="250dp"
@@ -49,9 +50,6 @@
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="100dp"
             tools:layout_editor_absoluteY="405dp" />
-
-
-
 
     </LinearLayout>
 

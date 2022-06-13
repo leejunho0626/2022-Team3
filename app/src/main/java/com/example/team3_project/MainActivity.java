@@ -22,11 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Main_Adapter main_adapter;
     
-    //1. Firebase 실시간DB 객체 얻어오기
+    //Firebase 실시간DB 객체 얻어오기
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    //2. 저장시킬 노드 참조객체 가져오기
-    DatabaseReference ref = firebaseDatabase.getReference(); //()안에 내용이 없으면 최상위 노드
+    DatabaseReference ref = firebaseDatabase.getReference();
 
+    //새로고침
     SwipeRefreshLayout refresh_layout;
 
     @Override
@@ -82,12 +79,10 @@ public class MainActivity extends AppCompatActivity {
                 main_adapter.arrValue.clear();
                 main_adapter.arrTime.clear();
 
-                // 새로고침 코드를 작성
+                // 새로고침
                 result_check();
                 main_adapter.notifyDataSetChanged();
-
-                // 새로고침 완료시,
-                // 새로고침 아이콘이 사라질 수 있게 isRefreshing = false
+                // 새로고침 아이콘 사라짐
                 refresh_layout.setRefreshing(false);
             }
         });
@@ -145,20 +140,13 @@ public class MainActivity extends AppCompatActivity {
 
                         String value = round2+"/"+area2;
 
-                        String target4 = "user=";
-                        int target_num4 = str.indexOf(target4);
-                        String user = str.substring(target_num4,(str.substring(target_num4).indexOf("}")+target_num4));
-                        String user2 = user.substring(user.indexOf("=")+1);
-
                         String target = "time=";
                         int target_num = str.indexOf(target);
                         String time = str.substring(target_num,(str.substring(target_num).indexOf(",")+target_num));
                         String time2 = time.substring(time.indexOf("=")+1);
 
-
                         main_adapter.setArrayData(result2, value, time2);
                         recyclerView.setAdapter(main_adapter);
-
 
                     }
                 }
@@ -169,8 +157,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     //뒤로가기 버튼(종료)
     public void onBackPressed() {

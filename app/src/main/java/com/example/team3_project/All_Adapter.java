@@ -2,19 +2,16 @@ package com.example.team3_project;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
 
 public class All_Adapter extends RecyclerView.Adapter<ViewHolder> {
     ArrayList<String> arrTime;
@@ -39,7 +36,7 @@ public class All_Adapter extends RecyclerView.Adapter<ViewHolder> {
         return viewholder;
     }
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) { //데이터 넣기
 
         String time = arrTime.get(position);
         String value= arrValue.get(position);
@@ -55,8 +52,6 @@ public class All_Adapter extends RecyclerView.Adapter<ViewHolder> {
         holder.txt_value.setText(value);
         holder.txt_user.setText(user);
         holder.txt_time.setText(time);
-
-
 
     }
     @Override
@@ -74,10 +69,7 @@ public class All_Adapter extends RecyclerView.Adapter<ViewHolder> {
         arrUser.add(user);
         arrTime.add(time);
 
-
         notifyDataSetChanged();
-
-
 
     }
 }
